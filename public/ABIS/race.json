@@ -1,0 +1,125 @@
+[
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "number", "type": "uint256" }
+    ],
+    "name": "buyTicket",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "claim",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "currentRace",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "seed", "type": "uint256" }
+    ],
+    "name": "generateWinners",
+    "outputs": [
+      { "internalType": "uint8[20]", "name": "", "type": "uint8[20]" }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "owner",
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "ownerPoints",
+    "outputs": [{ "internalType": "uint256", "name": "", "type": "uint256" }],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "uint256", "name": "seed", "type": "uint256" }
+    ],
+    "name": "startRace",
+    "outputs": [],
+    "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "user", "type": "address" }
+    ],
+    "name": "vPlayerInfo",
+    "outputs": [
+      {
+        "components": [
+          { "internalType": "uint256", "name": "points", "type": "uint256" },
+          { "internalType": "bool", "name": "pendingReward", "type": "bool" },
+          {
+            "internalType": "uint256",
+            "name": "raceIdReward",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "racesIds",
+            "type": "uint256[]"
+          },
+          {
+            "internalType": "uint256",
+            "name": "unclaimedPoints",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256[]",
+            "name": "numbers",
+            "type": "uint256[]"
+          }
+        ],
+        "internalType": "struct RaceGame.Player",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [{ "internalType": "uint256", "name": "id", "type": "uint256" }],
+    "name": "vRace",
+    "outputs": [
+      {
+        "components": [
+          {
+            "internalType": "address[20]",
+            "name": "race",
+            "type": "address[20]"
+          },
+          {
+            "internalType": "uint8[20]",
+            "name": "winnerPositions",
+            "type": "uint8[20]"
+          },
+          { "internalType": "uint8", "name": "sponsors", "type": "uint8" },
+          { "internalType": "bool[3]", "name": "claimed", "type": "bool[3]" }
+        ],
+        "internalType": "struct RaceGame.Race",
+        "name": "",
+        "type": "tuple"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  }
+]
