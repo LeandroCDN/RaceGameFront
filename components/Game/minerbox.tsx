@@ -127,7 +127,7 @@ export const Minerbox = () => {
     <div className="flex flex-col justify-between border-2 border-red-400 mb-2 m-2 rounded-md p-5">
       <button
         onClick={handleBuyWorker}
-        className="border-2 border-green-500 rounded-md py-1 text-green-600 text-sm px-4 py-2"
+        className="border-2 border-green-500 rounded-md text-green-600 text-sm px-4 py-2"
       >
         Deposit
       </button>
