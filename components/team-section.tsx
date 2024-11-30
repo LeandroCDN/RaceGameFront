@@ -18,16 +18,38 @@ import MyModal from "./modal";
 import ConfirmationModal from "./confirmation-modal";
 
 const TEAMS = [
-  "BPack Racing / BPack Tr",
-  "Scuderia Maranello / Rino",
-  "Zenith Motors / Carreritas 2000 ",
-  "Rising Sun / SurHub",
-  "Azure / RaceHub",
-  "Ironhelm Racing / DogeRace",
-  "Oneplus Motors / BTCRace",
-  "Phoenix / ETH Racing",
-  "Gazelle Racing / Chill Guy",
-  "Hawk Racing / PEPE",
+  "Ribbit Racing",
+  "Good Bois",
+  "New Hound",
+  "Valhalla",
+  "Meow Motors",
+  "Crypto Cats",
+  "Moodett",
+  "UnderDogs",
+  "Boys Club",
+  "OutCasts",
+];
+const TEAMSRunners = [
+  "PEPE",
+  "TURBO",
+  "DOGE",
+  "SHIB",
+  "WIF",
+  "BONK",
+  "FLOKI",
+  "HELGA",
+  "POPCAT",
+  "MIGGLES",
+  "PURR",
+  "WEN",
+  "MOODENG",
+  "BRETT",
+  "NEIRO",
+  "SUNDOG",
+  "CHILLGUY",
+  "GIGA",
+  "PUFF",
+  "PNUT",
 ];
 
 export function TeamSelection() {
@@ -134,58 +156,76 @@ export function TeamSelection() {
   };
 
   return (
-    <Card className="w-full">
-      <CardHeader className="flex flex-row items-center justify-between">
-        <div className="text-sm">Username</div>
-        <div className="flex items-center gap-1">
-          <Coins className="w-4 h-4" />
-          <span>{credits.toFixed(2)}</span>
+    <div className="w-full bg-slate-700 h-full">
+      <CardHeader className="flex flex-col items-center p-0 pt-2 mb-6">
+        <div className="flex flex-row items-center justify-between">
+          <div className="text-sm">Username</div>
+          <div className="flex items-center gap-1">
+            <Coins className="w-4 h-4" />
+            <span>{credits.toFixed(2)}</span>
+          </div>
         </div>
+        <p className="text-3xl text-white">SELECT YOUR TEAM</p>
       </CardHeader>
-      <CardContent>
-        <div className="text-lg font-medium mb-4">Choose your Team</div>
-        <div className="space-y-2">
-          {TEAMS.map((team, teamIndex) => (
-            <Button
-              key={team}
-              variant={selectedTeam === team ? "default" : "outline"}
-              className={`w-full justify-start ${
-                !isAvailable(teamIndex) && "bg-gray-200 cursor-not-allowed"
-              }`}
-              disabled={!isAvailable(teamIndex)} // Disable unavailable buttons
-              onClick={() => {
-                if (isAvailable(teamIndex)) {
-                  setSelectedTeam(team);
-                  setIndex(teamIndex);
-                }
-              }}
-            >
-              <div className="w-4 h-4 rounded-full border mr-2" />
-              {team}
-            </Button>
-          ))}
+      <CardContent className=" mb-4">
+        <div className="space-y-2 flex flex-col justify-center items-center">
+          <div className="overflow-y-auto max-h-[75vh] scrollbar-hide no-scrollbar">
+            <div className="grid grid-cols-2 gap-2">
+              {TEAMS.map((team, teamIndex) => (
+                <Button
+                  key={team}
+                  variant={selectedTeam === team ? "default" : "outline"}
+                  className={`justify-start h-24 w-40 rounded-xl border-2 p-1 ${
+                    selectedTeam === team ? "border-green-600" : "border-white"
+                  } ${
+                    !isAvailable(teamIndex) && "bg-gray-200 cursor-not-allowed"
+                  } `}
+                  disabled={!isAvailable(teamIndex)} // Disable unavailable buttons
+                  onClick={() => {
+                    if (isAvailable(teamIndex)) {
+                      setSelectedTeam(team);
+                      setIndex(teamIndex);
+                    }
+                  }}
+                  style={{
+                    backgroundImage: `url('/runners/${teamIndex}.png')`,
+                    backgroundSize: "125% auto",
+                    backgroundPosition: "center",
+                    backgroundRepeat: "no-repeat",
+                    overflow: "hidden",
+                  }}
+                >
+                  <div className="h-full w-full flex flex-col justify-between">
+                    <p className="text-white text-xl text-stroke-3">{team}</p>
+                    <div className="flex flex-row justify-between px-1">
+                      <span className="text-white text-sm">
+                        {TEAMSRunners[teamIndex * 2]}
+                      </span>
+                      <span className="text-white text-sm">
+                        {TEAMSRunners[teamIndex * 2 + 1]}
+                      </span>
+                    </div>
+                  </div>
+                </Button>
+              ))}
+            </div>
+          </div>
         </div>
       </CardContent>
-      <CardFooter className="grid grid-cols-2 gap-4">
-        {isConfirmationModalOpen && (
-          <ConfirmationModal
-            onConfirm={handleBuyTicket}
-            onClose={() => setIsConfirmationModalOpen(false)}
-          />
-        )}
+      <CardFooter className="grid grid-cols-2 gap-4 mb-4">
         <Button
           onClick={() => {
-            console.log(isConfirmationModalOpen);
-            setIsConfirmationModalOpen(true);
-            console.log(isConfirmationModalOpen);
+            handleBuyTicket();
           }}
+          disabled={!selectedTeam}
+          className="text-xl py-2 px-2"
         >
-          BuyTicket
+          Buy Race ticket
         </Button>
         <Button variant="outline" onClick={() => setScreen("main")}>
           Quit
         </Button>
       </CardFooter>
-    </Card>
+    </div>
   );
 }

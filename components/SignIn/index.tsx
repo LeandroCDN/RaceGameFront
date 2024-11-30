@@ -43,22 +43,34 @@ export function SignIn() {
     }
   };
 
-  useEffect(() => {
-    signInWithWallet(); // Si no tiene wallet, hacer login
-  }, []);
+  // useEffect(() => {
+  //   signInWithWallet(); // Si no tiene wallet, hacer login
+  // }, []);
 
   const getWallet = async () => {
     console.log("MiniKit.walletAddress", MiniKit.walletAddress);
   };
 
   return (
-    <div className="flex flex-col">
-      <h1 className="text-3xl text-center">World Racing</h1>
-      <button onClick={signInWithWallet} className="bg-green-500 mb-2 p-2">
-        Sign In with Wallet
-      </button>
-      <button onClick={getWallet} className="bg-green-500 mb-2 p-2">
-        GetWallet
+    <div
+      className="flex flex-col w-screen h-screen items-center justify-center"
+      style={{
+        backgroundImage: "url('/backgrounds/login-bg.webp')",
+        backgroundSize: "cover",
+        height: "100vh", // Ajusta la altura según sea necesario
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <h1 className=" text-center text-white text-6xl mb-4 font-bold">
+        MEME RACING
+      </h1>
+      <button
+        onClick={signInWithWallet}
+        className="bg-yellow-300 mb-2 py-4 px-6 text-xl rounded-sm"
+      >
+        Sign In
       </button>
     </div>
   );

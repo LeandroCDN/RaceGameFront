@@ -28,7 +28,7 @@ export const Game = () => {
       setBasePrice(price.toString()); // Formatear el valor si es en wei
     } catch (error) {
       console.error("Error fetching base price:", error);
-      alert("Failed to fetch base price. Check console for details.");
+      //alert("Failed to fetch base price. Check console for details.");
     }
   };
 

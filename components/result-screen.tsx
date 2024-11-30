@@ -89,7 +89,7 @@ export function ResultScreen() {
       const sortedTeams = getSortedTeams();
     } catch (error) {
       console.error("Error fetching base price:", error);
-      alert("Failed to fetch base price. Check console for details.");
+      //alert("Failed to fetch base price. Check console for details.");
     }
   };
 
