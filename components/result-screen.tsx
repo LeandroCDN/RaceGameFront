@@ -29,26 +29,49 @@ export function ResultScreen() {
   const provider = new ethers.JsonRpcProvider(process.env.NEXT_PUBLIC_RPC_URL);
   const raceAddress = process.env.NEXT_PUBLIC_RACE_ADDRESS;
   const TEAMS = [
-    "BPack Racing",
-    "BPack Racing 2",
-    "Scuderia Maranello",
-    "Scuderia Maranello 2",
-    "Zenith Motors",
-    "Zenith Motors 2",
-    "Rising Sun",
-    "Rising Sun 2",
-    "Azure",
-    "Azure 2",
-    "Ironhelm Racing",
-    "Ironhelm Racing 2",
-    "Oneplus Motors",
-    "Oneplus Motors 2",
-    "Phoenix",
-    "Phoenix 2",
-    "Gazelle Racing",
-    "Gazelle Racing 2",
-    "Hawk Racing",
-    "Hawk Racing 2",
+    "Ribbit Racing",
+    "Ribbit Racing",
+    "Good Bois",
+    "Good Bois",
+    "New Hound",
+    "New Hound",
+    "Valhalla",
+    "Valhalla",
+    "Meow Motors",
+    "Meow Motors",
+    "Crypto Cats",
+    "Crypto Cats",
+    "Moodett",
+    "Moodett",
+    "UnderDogs",
+    "UnderDogs",
+    "Boys Club",
+    "Boys Club",
+    "OutCasts",
+    "OutCasts",
+  ];
+
+  const TEAMSRunners = [
+    "PEPE",
+    "TURBO",
+    "DOGE",
+    "SHIB",
+    "WIF",
+    "BONK",
+    "FLOKI",
+    "HELGA",
+    "POPCAT",
+    "MIGGLES",
+    "PURR",
+    "WEN",
+    "MOODENG",
+    "BRETT",
+    "NEIRO",
+    "SUNDOG",
+    "CHILLGUY",
+    "GIGA",
+    "PUFF",
+    "PNUT",
   ];
 
   const getData = async () => {
@@ -94,11 +117,11 @@ export function ResultScreen() {
   };
 
   const getSortedTeams = () => {
-    if (!raceData) return TEAMS;
+    if (!raceData) return TEAMSRunners;
 
     // Crear un nuevo arreglo de equipos ordenados
     const sortedTeams = raceData.winnerPositions.map(
-      (winnerNumber) => TEAMS[winnerNumber]
+      (winnerNumber) => TEAMSRunners[winnerNumber]
     );
 
     return sortedTeams;
@@ -120,46 +143,131 @@ export function ResultScreen() {
   if (screen !== "result") return null;
 
   return (
-    <Card className="w-full">
-      <CardContent className="pt-6">
-        <div className="space-y-4 text-center">
-          {/* Mostrar equipos ordenados */}
-          <h2 className="text-xl font-bold mb-4">Race Results</h2>
-          {raceData && (
-            <div className="overflow-y-auto h-[70vh] scrollbar-hide no-scrollbar">
-              {getSortedTeams().map((team, index) => (
-                <div
-                  key={team}
-                  className={`p-2  mb-2 rounded ${
-                    isUserTeam(getSortedTeams().indexOf(team))
-                      ? "bg-green-100 border-2 border-green-500"
-                      : "bg-gray-100"
-                  }`}
-                >
-                  Position {index + 1}: {team}
-                  {isUserTeam(getSortedTeams().indexOf(team)) && (
-                    <span className="ml-2 text-green-600 font-bold">
-                      (Your Team)
-                    </span>
-                  )}
+    <div
+      style={{
+        backgroundImage: "url('/backgrounds/result.webp')",
+        backgroundSize: "cover",
+        height: "100vh", // Ajusta la altura según sea necesario
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div className="w-full h-screen flex flex-col justify-between items-center p-0 m-0">
+        <h1 className="text-6xl text-white"> Race Result</h1>
+        <CardContent className="p-0 m-0">
+          <div className=" text-center mt-4 w-screen">
+            {raceData && (
+              <div className="border  border-white p-2 mx-1 rounded">
+                <div className="border border-white mb-2 rounded">
+                  {getSortedTeams()
+                    .slice(0, 3)
+                    .map((team, index) => (
+                      <div
+                        key={team}
+                        className={`p-2 mb-2 rounded text-white ${
+                          isUserTeam(index) ? "text-green-500" : ""
+                        }`}
+                      >
+                        <div className="flex justify-between items-center flex-row">
+                          <div className="flex flex-row">
+                            <p className="mr-2 text-4xl">{index + 1}</p>
+                            <p className="mr-2 text-4xl">🤑</p>
+                            <div>
+                              <p className="text-2xl"> {team} </p>
+                              <p className="text-sm"> {TEAMS[index]} </p>
+                            </div>
+                          </div>
+                          <p>500</p>
+                        </div>
+                      </div>
+                    ))}
                 </div>
-              ))}
-            </div>
+
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="border border-white p-2 rounded text-white">
+                    {getSortedTeams()
+                      .slice(3, 12)
+                      .map((team, index) => (
+                        <div
+                          key={team}
+                          className={` ${
+                            isUserTeam(index + 3)
+                              ? " font-semibold"
+                              : "bg-gray-100"
+                          }`}
+                        >
+                          <div className="flex justify-between items-center flex-row">
+                            <p className="mr-2 text-sm">{index + 4}</p>
+                            <div className="flex flex-row">
+                              <p className="text-sm ml-1"> {team} - </p>
+                              <p className="text-sm">
+                                {" "}
+                                {TEAMS[index]
+                                  .split(" ")[0]
+                                  .substring(0, 3)
+                                  .toUpperCase()}{" "}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                  <div className="border border-white p-2 rounded text-white">
+                    {getSortedTeams()
+                      .slice(12, 20)
+                      .map((team, index) => (
+                        <div
+                          key={team}
+                          className={` ${
+                            isUserTeam(index + 12)
+                              ? " font-semibold"
+                              : "bg-gray-100"
+                          }`}
+                        >
+                          <div className="flex justify-between items-center flex-row">
+                            <p className="mr-2 text-sm">{index + 13}</p>
+                            <div className="flex flex-row">
+                              <p className="text-sm ml-1"> {team} - </p>
+                              <p className="text-sm">
+                                {" "}
+                                {TEAMS[index]
+                                  .split(" ")[0]
+                                  .substring(0, 3)
+                                  .toUpperCase()}{" "}
+                              </p>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+        </CardContent>
+        <CardFooter className="flex flex-row justify-evenly p-0 m-0 pb-2 w-full">
+          {playerStat?.pendingReward && (
+            <MyModal
+              texto="You have unclaimed points!"
+              numero={playerStat.unclaimedPoints}
+            />
           )}
-        </div>
-      </CardContent>
-      <CardFooter className="grid grid-cols-2 gap-4">
-        {playerStat?.pendingReward && (
-          <MyModal
-            texto="You have unclaimed points!"
-            numero={playerStat.unclaimedPoints}
-          />
-        )}
-        <Button variant="outline" onClick={() => setScreen("main")}>
-          Return
-        </Button>
-        <Button onClick={() => console.log(raceData)}>Show Data</Button>
-      </CardFooter>
-    </Card>
+
+          <div className="flex flex-col justify-evenly">
+            <Button variant="outline" onClick={() => setScreen("main")}>
+              Return
+            </Button>
+            <Button onClick={() => console.log(raceData)}>HELP</Button>
+          </div>
+          <Button
+            className="h-full w-[45%] bg-yellow-400"
+            onClick={() => console.log(raceData)}
+          >
+            Race Again!
+          </Button>
+        </CardFooter>
+      </div>
+    </div>
   );
 }
