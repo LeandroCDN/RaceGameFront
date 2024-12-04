@@ -63,9 +63,7 @@ export function SignIn() {
         alignItems: "center",
       }}
     >
-      <h1 className=" text-center text-white text-6xl mb-4 font-bold">
-        MEME RACING
-      </h1>
+      <h1 className=" text-center text-white text-6xl mb-4 ">MEME RACING</h1>
       <button
         onClick={signInWithWallet}
         className="bg-yellow-300 mb-2 py-4 px-6 text-xl rounded-sm"

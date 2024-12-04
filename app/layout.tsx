@@ -5,6 +5,7 @@ import MiniKitProvider from "@/components/minikit-provider";
 import dynamic from "next/dynamic";
 import NextAuthProvider from "@/components/next-auth-provider";
 import { GameProvider } from "@/components/game-provider";
+import { lilitaFont, ZingRust } from "./fonts";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,7 +31,7 @@ export default function RootLayout({
         <ErudaProvider>
           <MiniKitProvider>
             <GameProvider>
-              <body className={inter.className}>{children}</body>
+              <body className={ZingRust.className}>{children}</body>
             </GameProvider>
           </MiniKitProvider>
         </ErudaProvider>
