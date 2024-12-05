@@ -78,6 +78,39 @@ export function ResultScreen() {
     "PNUT",
   ];
 
+  const ABI = [
+    {
+      inputs: [],
+      name: "claim",
+      outputs: [],
+      stateMutability: "nonpayable",
+      type: "function",
+    },
+  ];
+
+  const handleClaim = async () => {
+    if (!raceAddress) {
+      throw new Error(
+        "NEXT_PUBLIC_RACE_ADDRESS environment variable is not set"
+      );
+    }
+    try {
+      const response = await MiniKit.commandsAsync.sendTransaction({
+        transaction: [
+          {
+            address: raceAddress,
+            abi: ABI,
+            functionName: "claim",
+            args: [],
+          },
+        ],
+      });
+      console.log("Transaction sent:", response);
+    } catch (error) {
+      console.error("Error executing transaction:", error);
+    }
+  };
+
   const getData = async () => {
     if (!raceAddress) {
       throw new Error(
@@ -195,8 +228,15 @@ export function ResultScreen() {
                       >
                         <div className="flex justify-between items-center flex-row">
                           <div className="flex flex-row">
-                            <p className="mr-2 text-4xl">{index + 1}</p>
-                            <div className="mx-4 w-12 h-12 relative">
+                            <div className="mr-1 text-4xl w-12 h-12 relative">
+                              <Image
+                                src={`/medals/${index}.png`}
+                                alt={`Team ${index + 1} coin`}
+                                layout="fill"
+                                objectFit="contain"
+                              />
+                            </div>
+                            <div className="mr-4 w-12 h-12 relative">
                               <Image
                                 src={`/coins/${TEAMSRunners.indexOf(team)}.png`}
                                 alt={`Team ${index + 1} coin`}
@@ -340,19 +380,19 @@ export function ResultScreen() {
               Return
             </button>
             <button
-              className="bg-purple-400 px-4 py-2 rounded-full"
+              className="bg-purple-400 px-4 py-2 rounded-full opacity-60 cursor-not-allowed"
               onClick={() => console.log(raceData)}
             >
-              HELP
+              Survivor!
             </button>
           </div>
           <div className="w-[50%]">
             {playerStat?.pendingReward ? (
               <button
                 className="h-[100%] w-auto text-4xl text-white px-4 py-2"
-                onClick={() => console.log("Claim rewards no implementado")}
+                onClick={handleClaim}
                 style={{
-                  backgroundImage: "url('/buttons/yellow.png')",
+                  backgroundImage: "url('/buttons/blue.png')",
                   backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
                   backgroundRepeat: "no-repeat", // Evita la repetición
                   height: "auto",
@@ -371,7 +411,7 @@ export function ResultScreen() {
                 className="h-[100%] w-auto text-4xl text-white px-4 py-2"
                 onClick={() => setScreen("team")}
                 style={{
-                  backgroundImage: "url('/buttons/blue.png')",
+                  backgroundImage: "url('/buttons/yellow.png')",
                   backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
                   backgroundRepeat: "no-repeat", // Evita la repetición
                   height: "auto",

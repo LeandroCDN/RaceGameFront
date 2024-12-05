@@ -2,8 +2,7 @@
 
 import { MainScreen } from "@/components/main-screen";
 import { TeamSelection } from "@/components/team-section";
-import { ConfirmationScreen } from "@/components/confirmation-screen";
-import { GameProvider, useGame } from "@/components/game-provider";
+import { useGame } from "@/components/game-provider";
 import { ResultScreen } from "@/components/result-screen";
 
 export default function Page() {
@@ -13,7 +12,6 @@ export default function Page() {
       <MainScreen />
       {screen === "team" && <TeamSelection key="team" />}
       {screen === "result" && <ResultScreen key="result" />}
-      {/* <ResultScreen /> */}
     </main>
   );
 }

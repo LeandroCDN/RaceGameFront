@@ -7,9 +7,9 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { Coins } from "lucide-react";
 import { useGame } from "./game-provider";
 import ABI from "@/public/ABIS/RACEABI.json";
+import WLDABI from "@/public/ABIS/WLD.json";
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { MiniKit } from "@worldcoin/minikit-js";
@@ -18,6 +18,7 @@ import { ZingRust } from "@/app/fonts";
 export function MainScreen() {
   const { screen, setScreen, credits } = useGame();
   const [points, setPoints] = useState<number | null>(0);
+  const [balance, setBalance] = useState<string | null>("0");
   const [playerStat, setPlayerStat] = useState<{
     points: number;
     pendingReward: boolean;
@@ -29,6 +30,7 @@ export function MainScreen() {
   const RPC = process.env.NEXT_PUBLIC_RPC_URL;
   const provider = new ethers.JsonRpcProvider(RPC);
   const raceAddress = process.env.NEXT_PUBLIC_RACE_ADDRESS;
+  const wldAddress = "0x2cFc85d8E48F8EAB294be644d9E25C3030863003";
 
   const getPoints = async () => {
     if (!raceAddress) {
@@ -36,10 +38,20 @@ export function MainScreen() {
         "NEXT_PUBLIC_MINE_ADDRESS environment variable is not set"
       );
     }
-
+    console.log(MiniKit.user);
+    console.log(MiniKit.appId);
     try {
       const contract = new ethers.Contract(raceAddress, ABI, provider);
       const userAddress = MiniKit.walletAddress;
+      const contractWLD = new ethers.Contract(wldAddress!, WLDABI, provider);
+
+      const wldBalance = await contractWLD.balanceOf(userAddress);
+
+      // 1 decimal in ether
+      const wldBalanceInEther = ethers.formatEther(wldBalance);
+      const wldBalanceFormatted = parseFloat(wldBalanceInEther).toFixed(1);
+
+      setBalance(wldBalanceFormatted.toString());
 
       const playerInfo = await contract.vPlayerInfo(userAddress);
 
@@ -83,11 +95,23 @@ export function MainScreen() {
         alignItems: "center",
       }}
     >
-      <CardHeader className="flex flex-row items-center justify-between text-white">
-        <div className="text-sm">{MiniKit.appId}</div>
-        <div className="flex items-center gap-1">
-          <Coins className="w-4 h-4" />
-          <span>99999</span>
+      <CardHeader className="flex flex-row text-white w-full justify-end">
+        <div
+          className="rounded-full flex justify-end items-center align-middle w-full pr-2"
+          style={{
+            backgroundImage: "url('/balance.png')",
+            backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
+            backgroundPosition: "center", // Centra la imagen de fondo
+            height: "42px", // Ajusta la altura según sea necesario
+            width: "125px",
+            display: "flex",
+            justifyContent: "flex-end", // Alinea horizontalmente al final
+            alignItems: "flex-end", // Alinea verticalmente al final
+          }}
+        >
+          <span className="text-2xl text-center h-full pt-1 pr-2">
+            {balance}
+          </span>
         </div>
       </CardHeader>
       <CardContent className="space-y-6 h-full flex flex-col justify-center items-center text-white">
