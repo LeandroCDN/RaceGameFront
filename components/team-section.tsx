@@ -158,9 +158,9 @@ export function TeamSelection() {
 
   return (
     <div
-      className="w-full bg-slate-700 h-full"
+      className="w-full h-screen flex flex-col justify-between"
       style={{
-        backgroundImage: "url('/backgrounds/result.webp')",
+        backgroundImage: "url('/backgrounds/game-bg.webp')",
         backgroundSize: "cover",
         height: "100vh", // Ajusta la altura según sea necesario
         display: "flex",
