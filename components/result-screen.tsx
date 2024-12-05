@@ -28,8 +28,10 @@ export function ResultScreen() {
     sponsors: number;
     claimed: boolean[];
   } | null>(null);
-  const provider = new ethers.JsonRpcProvider(process.env.NEXT_PUBLIC_RPC_URL);
-  const raceAddress = process.env.NEXT_PUBLIC_RACE_ADDRESS;
+  const provider = new ethers.JsonRpcProvider(
+    "https://worldchain-mainnet.g.alchemy.com/public"
+  );
+  const raceAddress = "0xee81998667679C0373786035877F959Aa8DBEF5c";
   const TEAMS = [
     "Ribbit Racing",
     "Ribbit Racing",
@@ -161,6 +163,7 @@ export function ResultScreen() {
 
   return (
     <div
+      className="w-full h-screen flex flex-col justify-between"
       style={{
         backgroundImage: "url('/backgrounds/result.webp')",
         backgroundSize: "cover",

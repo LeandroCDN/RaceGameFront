@@ -12,7 +12,8 @@ export default function Page() {
     <main className="container max-w-md mx-auto h-screen">
       <MainScreen />
       {screen === "team" && <TeamSelection key="team" />}
-      <ResultScreen />
+      {screen === "result" && <ResultScreen key="result" />}
+      {/* <ResultScreen /> */}
     </main>
   );
 }
