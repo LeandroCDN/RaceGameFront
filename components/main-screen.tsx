@@ -59,7 +59,6 @@ export function MainScreen() {
       const currentRace = await contract.currentRace();
       const vRaceInfo = await contract.vRace(currentRace);
       console.log(playerStatData);
-      // console.log("RACE", vRaceInfo);
     } catch (error) {
       console.error("Error fetching base price:", error);
       // alert("Failed to fetch base price. Check console for details.");
@@ -85,7 +84,7 @@ export function MainScreen() {
       }}
     >
       <CardHeader className="flex flex-row items-center justify-between text-white">
-        <div className="text-sm">Username</div>
+        <div className="text-sm">{MiniKit.appId}</div>
         <div className="flex items-center gap-1">
           <Coins className="w-4 h-4" />
           <span>99999</span>

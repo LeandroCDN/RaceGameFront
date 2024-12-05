@@ -10,6 +10,7 @@ export function SignIn() {
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   const signInWithWallet = async () => {
+    console.log("sig in");
     if (!MiniKit.isInstalled()) {
       return;
     }
@@ -47,6 +48,7 @@ export function SignIn() {
   };
 
   useEffect(() => {
+    console.log("sig in use effect");
     signInWithWallet(); // Si no tiene wallet, hacer login
   }, []);
 
