@@ -13,10 +13,11 @@ import ABI from "@/public/ABIS/RACEABI.json";
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { MiniKit } from "@worldcoin/minikit-js";
+import { ZingRust } from "@/app/fonts";
 
 export function MainScreen() {
   const { screen, setScreen, credits } = useGame();
-  // const [points, setPoints] = useState<number | null>(0);
+  const [points, setPoints] = useState<number | null>(0);
   const [playerStat, setPlayerStat] = useState<{
     points: number;
     pendingReward: boolean;
@@ -25,49 +26,49 @@ export function MainScreen() {
     unclaimedPoints: number;
     numbers: number[];
   } | null>(null);
-  // const RPC = process.env.NEXT_PUBLIC_RPC_URL;
-  // const provider = new ethers.JsonRpcProvider(RPC);
-  // const raceAddress = process.env.NEXT_PUBLIC_RACE_ADDRESS;
+  const RPC = process.env.NEXT_PUBLIC_RPC_URL;
+  const provider = new ethers.JsonRpcProvider(RPC);
+  const raceAddress = process.env.NEXT_PUBLIC_RACE_ADDRESS;
 
-  // const getPoints = async () => {
-  //   if (!raceAddress) {
-  //     throw new Error(
-  //       "NEXT_PUBLIC_MINE_ADDRESS environment variable is not set"
-  //     );
-  //   }
+  const getPoints = async () => {
+    if (!raceAddress) {
+      throw new Error(
+        "NEXT_PUBLIC_MINE_ADDRESS environment variable is not set"
+      );
+    }
 
-  //   try {
-  //     const contract = new ethers.Contract(raceAddress, ABI, provider);
-  //     const userAddress = MiniKit.walletAddress;
+    try {
+      const contract = new ethers.Contract(raceAddress, ABI, provider);
+      const userAddress = MiniKit.walletAddress;
 
-  //     const playerInfo = await contract.vPlayerInfo(userAddress);
+      const playerInfo = await contract.vPlayerInfo(userAddress);
 
-  //     // Estructurar la información del jugador
-  //     const playerStatData = {
-  //       points: Number(playerInfo[0]),
-  //       pendingReward: playerInfo[1],
-  //       raceIdReward: Number(playerInfo[2]),
-  //       racesIds: playerInfo[3].map(Number),
-  //       unclaimedPoints: Number(playerInfo[4]),
-  //       numbers: playerInfo[5].map(Number),
-  //     };
+      // Estructurar la información del jugador
+      const playerStatData = {
+        points: Number(playerInfo[0]),
+        pendingReward: playerInfo[1],
+        raceIdReward: Number(playerInfo[2]),
+        racesIds: playerInfo[3].map(Number),
+        unclaimedPoints: Number(playerInfo[4]),
+        numbers: playerInfo[5].map(Number),
+      };
 
-  //     setPlayerStat(playerStatData);
-  //     setPoints(playerStatData.points);
+      setPlayerStat(playerStatData);
+      setPoints(playerStatData.points);
 
-  //     const currentRace = await contract.currentRace();
-  //     const vRaceInfo = await contract.vRace(currentRace);
-  //     console.log(playerStatData);
-  //     // console.log("RACE", vRaceInfo);
-  //   } catch (error) {
-  //     console.error("Error fetching base price:", error);
-  //     alert("Failed to fetch base price. Check console for details.");
-  //   }
-  // };
+      const currentRace = await contract.currentRace();
+      const vRaceInfo = await contract.vRace(currentRace);
+      console.log(playerStatData);
+      // console.log("RACE", vRaceInfo);
+    } catch (error) {
+      console.error("Error fetching base price:", error);
+      // alert("Failed to fetch base price. Check console for details.");
+    }
+  };
 
-  // useEffect(() => {
-  //   getPoints();
-  // }, []);
+  useEffect(() => {
+    getPoints();
+  }, []);
 
   if (screen !== "main") return null;
 
@@ -91,27 +92,61 @@ export function MainScreen() {
         </div>
       </CardHeader>
       <CardContent className="space-y-6 h-full flex flex-col justify-center items-center text-white">
-        <div className="text-center space-y-1">
-          <h1 className="text-8xl font-bold tracking-tighter ">Meme Racing</h1>
+        <div className={`text-center space-y-1 ${ZingRust.className}`}>
+          <h1 className="text-8xl text-stroke-2 text-white ">Meme Racing</h1>
         </div>
         <div className="space-y-4 ">
-          <Button
+          <button
             onClick={() => setScreen("team")}
-            className="h-auto bg-yellow-400 mb-2 py-4 px-6 text-4xl rounded-full"
-            variant="outline"
+            className="h-auto  mb-2 py-4 px-6 text-4xl rounded-full w-[100%]"
+            style={{
+              backgroundImage: "url('/buttons/yellow.png')",
+              backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
+              backgroundRepeat: "no-repeat", // Evita la repetición
+              height: "auto",
+              width: "full",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
           >
-            RACE!
-          </Button>
+            Quick Race
+          </button>
+          <div
+            // onClick={() => setScreen("team")}
+            className="rounded-full w-9 h-9 p-0  opacity-60 cursor-not-allowed"
+            style={{
+              backgroundImage: "url('/buttons/blue-full.png')",
+              backgroundSize: "100% 100%",
+              backgroundRepeat: "no-repeat",
+              height: "84px",
+              width: "auto",
+              display: "flex",
+              flexDirection: "column", // Cambia la dirección a columna
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          ></div>
         </div>
       </CardContent>
       <CardFooter className="">
-        <div
+        <button
           onClick={() => setScreen("result")}
-          className={`p-4 border rounded-lg bg-yellow-300 mb-2 py-4 px-6 text-xl ${
+          className={`h-auto rounded-full w-[100%] border border-black px-4 py-1${
             playerStat && playerStat.unclaimedPoints > 0
               ? "bg-green-100 border-green-500"
               : ""
           }`}
+          style={{
+            backgroundImage: "url('/buttons/gray.png')",
+            backgroundSize: "auto 100%", // Asegura que la imagen cubra todo el botón
+            backgroundRepeat: "no-repeat", // Evita la repetición
+            height: "auto",
+            width: "full",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
         >
           <div className="font-medium">Last Race</div>
           <div className="text-sm text-muted-foreground">
@@ -121,7 +156,7 @@ export function MainScreen() {
               </span>
             )}
           </div>
-        </div>
+        </button>
       </CardFooter>
     </div>
   );

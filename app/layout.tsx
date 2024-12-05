@@ -31,7 +31,7 @@ export default function RootLayout({
         <ErudaProvider>
           <MiniKitProvider>
             <GameProvider>
-              <body className={ZingRust.className}>{children}</body>
+              <body className={lilitaFont.className}>{children}</body>
             </GameProvider>
           </MiniKitProvider>
         </ErudaProvider>

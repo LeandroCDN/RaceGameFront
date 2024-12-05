@@ -16,6 +16,7 @@ import ABIRace from "@/public/ABIS/RACEABI.json";
 import { ConfirmationScreen } from "./confirmation-screen";
 import MyModal from "./modal";
 import ConfirmationModal from "./confirmation-modal";
+import { ZingRust } from "@/app/fonts";
 
 const TEAMS = [
   "Ribbit Racing",
@@ -156,76 +157,93 @@ export function TeamSelection() {
   };
 
   return (
-    <div className="w-full bg-slate-700 h-full">
-      <CardHeader className="flex flex-col items-center p-0 pt-2 mb-6">
-        <div className="flex flex-row items-center justify-between">
-          <div className="text-sm">Username</div>
-          <div className="flex items-center gap-1">
-            <Coins className="w-4 h-4" />
-            <span>{credits.toFixed(2)}</span>
-          </div>
-        </div>
-        <p className="text-3xl text-white">SELECT YOUR TEAM</p>
-      </CardHeader>
-      <CardContent className=" mb-4">
-        <div className="space-y-2 flex flex-col justify-center items-center">
-          <div className="overflow-y-auto max-h-[75vh] scrollbar-hide no-scrollbar">
-            <div className="grid grid-cols-2 gap-2">
-              {TEAMS.map((team, teamIndex) => (
-                <Button
-                  key={team}
-                  variant={selectedTeam === team ? "default" : "outline"}
-                  className={`justify-start h-24 w-40 rounded-xl border-2 p-1 ${
-                    selectedTeam === team ? "border-green-600" : "border-white"
-                  } ${
-                    !isAvailable(teamIndex) && "bg-gray-200 cursor-not-allowed"
-                  } `}
-                  disabled={!isAvailable(teamIndex)} // Disable unavailable buttons
-                  onClick={() => {
-                    if (isAvailable(teamIndex)) {
-                      setSelectedTeam(team);
-                      setIndex(teamIndex);
-                    }
-                  }}
-                  style={{
-                    backgroundImage: `url('/runners/${teamIndex}.png')`,
-                    backgroundSize: "125% auto",
-                    backgroundPosition: "center",
-                    backgroundRepeat: "no-repeat",
-                    overflow: "hidden",
-                  }}
-                >
-                  <div className="h-full w-full flex flex-col justify-between">
-                    <p className="text-white text-xl text-stroke-3">{team}</p>
-                    <div className="flex flex-row justify-between px-1">
-                      <span className="text-white text-sm">
-                        {TEAMSRunners[teamIndex * 2]}
-                      </span>
-                      <span className="text-white text-sm">
-                        {TEAMSRunners[teamIndex * 2 + 1]}
-                      </span>
-                    </div>
-                  </div>
-                </Button>
-              ))}
+    <div
+      className="w-full bg-slate-700 h-full"
+      style={{
+        backgroundImage: "url('/backgrounds/result.webp')",
+        backgroundSize: "cover",
+        height: "100vh", // Ajusta la altura según sea necesario
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <div className="w-full  h-full">
+        <CardHeader className="flex flex-col items-center p-0 pt-2 mb-6">
+          <div className="flex flex-row items-center justify-between">
+            <div className="text-sm">Username</div>
+            <div className="flex items-center gap-1">
+              <Coins className="w-4 h-4" />
+              <span>{credits.toFixed(2)}</span>
             </div>
           </div>
-        </div>
-      </CardContent>
-      <CardFooter className="grid grid-cols-2 gap-4 mb-4">
-        <Button
-          onClick={() => {
-            handleBuyTicket();
-          }}
-          disabled={!selectedTeam}
-          className="text-xl py-2 px-2"
-        >
-          Buy Race ticket
-        </Button>
-        <Button variant="outline" onClick={() => setScreen("main")}>
-          Quit
-        </Button>
-      </CardFooter>
+          <div className={` ${ZingRust.className}`}>
+            <p className="text-5xl text-white">SELECT YOUR TEAM</p>
+          </div>
+        </CardHeader>
+        <CardContent className=" mb-4">
+          <div className="space-y-2 flex flex-col justify-center items-center">
+            <div className="overflow-y-auto max-h-[75vh] scrollbar-hide no-scrollbar">
+              <div className="grid grid-cols-2 gap-2">
+                {TEAMS.map((team, teamIndex) => (
+                  <Button
+                    key={team}
+                    variant={selectedTeam === team ? "default" : "outline"}
+                    className={`justify-start h-24 w-40 rounded-xl border-2 p-1 ${
+                      selectedTeam === team
+                        ? "border-green-600"
+                        : "border-white"
+                    } ${
+                      !isAvailable(teamIndex) &&
+                      "bg-gray-200 cursor-not-allowed"
+                    } `}
+                    disabled={!isAvailable(teamIndex)} // Disable unavailable buttons
+                    onClick={() => {
+                      if (isAvailable(teamIndex)) {
+                        setSelectedTeam(team);
+                        setIndex(teamIndex);
+                      }
+                    }}
+                    style={{
+                      backgroundImage: `url('/runners/${teamIndex}.png')`,
+                      backgroundSize: "125% auto",
+                      backgroundPosition: "center",
+                      backgroundRepeat: "no-repeat",
+                      overflow: "hidden",
+                    }}
+                  >
+                    <div className="h-full w-full flex flex-col justify-between">
+                      <p className="text-white text-xl text-stroke-3">{team}</p>
+                      <div className="flex flex-row justify-between px-1">
+                        <span className="text-white text-sm">
+                          {TEAMSRunners[teamIndex * 2]}
+                        </span>
+                        <span className="text-white text-sm">
+                          {TEAMSRunners[teamIndex * 2 + 1]}
+                        </span>
+                      </div>
+                    </div>
+                  </Button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </CardContent>
+        <CardFooter className="grid grid-cols-2 gap-4 mb-4">
+          <Button
+            onClick={() => {
+              handleBuyTicket();
+            }}
+            disabled={!selectedTeam}
+            className="text-xl py-2 px-2"
+          >
+            Buy Race ticket
+          </Button>
+          <Button variant="outline" onClick={() => setScreen("main")}>
+            Quit
+          </Button>
+        </CardFooter>
+      </div>
     </div>
   );
 }

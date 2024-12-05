@@ -2,9 +2,12 @@
 import { MiniKit } from "@worldcoin/minikit-js";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { ZingRust } from "@/app/fonts";
+import "animate.css";
 
 export function SignIn() {
   const router = useRouter();
+  const [isButtonDisabled, setIsButtonDisabled] = useState(true);
 
   const signInWithWallet = async () => {
     if (!MiniKit.isInstalled()) {
@@ -43,9 +46,19 @@ export function SignIn() {
     }
   };
 
-  // useEffect(() => {
-  //   signInWithWallet(); // Si no tiene wallet, hacer login
-  // }, []);
+  useEffect(() => {
+    signInWithWallet(); // Si no tiene wallet, hacer login
+  }, []);
+
+  useEffect(() => {
+    // Habilita el botón después de 5 segundos
+    const timeoutId = setTimeout(() => {
+      setIsButtonDisabled(false);
+    }, 8000);
+
+    // Limpia el timeout si el componente se desmonta
+    return () => clearTimeout(timeoutId);
+  }, []);
 
   const getWallet = async () => {
     console.log("MiniKit.walletAddress", MiniKit.walletAddress);
@@ -53,7 +66,7 @@ export function SignIn() {
 
   return (
     <div
-      className="flex flex-col w-screen h-screen items-center justify-center"
+      className="flex flex-col w-screen h-screen"
       style={{
         backgroundImage: "url('/backgrounds/login-bg.webp')",
         backgroundSize: "cover",
@@ -63,13 +76,33 @@ export function SignIn() {
         alignItems: "center",
       }}
     >
-      <h1 className=" text-center text-white text-6xl mb-4 ">MEME RACING</h1>
-      <button
-        onClick={signInWithWallet}
-        className="bg-yellow-300 mb-2 py-4 px-6 text-xl rounded-sm"
-      >
-        Sign In
-      </button>
+      <div className="flex flex-col w-screen h-screen items-center justify-between">
+        <div></div>
+        <div className={ZingRust.className}>
+          <h1 className=" text-center text-white text-8xl mb-4 animate__animated animate__pulse animate__slow animate__infinite">
+            MEME RACING
+          </h1>
+        </div>
+        <button
+          onClick={signInWithWallet}
+          className={`mb-8 ${
+            isButtonDisabled ? "opacity-60 cursor-not-allowed" : ""
+          }`}
+          disabled={isButtonDisabled}
+          style={{
+            backgroundImage: "url('/buttons/green.png')",
+            backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
+            backgroundRepeat: "no-repeat", // Evita la repetición
+            height: "auto",
+            width: "full",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+          }}
+        >
+          <p className="text-4xl px-8 py-2 text-white">LOGIN</p>
+        </button>
+      </div>
     </div>
   );
 }

@@ -7,7 +7,9 @@ import { MiniKit } from "@worldcoin/minikit-js";
 import { ethers } from "ethers";
 import ABIRace from "@/public/ABIS/RACEABI.json";
 import { useState, useEffect, use } from "react";
+import Image from "next/image";
 import MyModal from "./modal";
+import { ZingRust } from "@/app/fonts";
 
 export function ResultScreen() {
   const { screen, setScreen, selectedTeam } = useGame();
@@ -140,6 +142,21 @@ export function ResultScreen() {
     getData();
   }, []);
 
+  const getPositionText = (index: number) => {
+    const positions = ["1ST", "2ND", "3RD"];
+    return positions[index];
+  };
+
+  const getRewardText = (index: number) => {
+    const rewards = ["+5 $WLD", "+3 $WLD", "+1 $WLD"];
+    return rewards[index];
+  };
+
+  const getPositionColor = (index: number) => {
+    const colors = ["text-red-500", "text-yellow-500", "text-purple-500"];
+    return colors[index];
+  };
+
   if (screen !== "result") return null;
 
   return (
@@ -154,7 +171,9 @@ export function ResultScreen() {
       }}
     >
       <div className="w-full h-screen flex flex-col justify-between items-center p-0 m-0">
-        <h1 className="text-6xl text-white"> Race Result</h1>
+        <div className={` ${ZingRust.className}`}>
+          <h1 className="text-6xl text-white"> Race Result</h1>
+        </div>
         <CardContent className="p-0 m-0">
           <div className=" text-center mt-4 w-screen">
             {raceData && (
@@ -166,19 +185,53 @@ export function ResultScreen() {
                       <div
                         key={team}
                         className={`p-2 mb-2 rounded text-white ${
-                          isUserTeam(index) ? "text-green-500" : ""
+                          isUserTeam(index)
+                            ? "text-green-500"
+                            : "text-green-500"
                         }`}
                       >
                         <div className="flex justify-between items-center flex-row">
                           <div className="flex flex-row">
                             <p className="mr-2 text-4xl">{index + 1}</p>
-                            <p className="mr-2 text-4xl">🤑</p>
-                            <div>
-                              <p className="text-2xl"> {team} </p>
-                              <p className="text-sm"> {TEAMS[index]} </p>
+                            <div className="mx-4 w-12 h-12 relative">
+                              <Image
+                                src={`/coins/${TEAMSRunners.indexOf(team)}.png`}
+                                alt={`Team ${index + 1} coin`}
+                                layout="fill"
+                                objectFit="contain"
+                              />
+                            </div>
+                            <div className="flex flex-col items-start">
+                              <p
+                                className={`text-2xl ${
+                                  isUserTeam(index) ? "text-green-500" : ""
+                                }`}
+                              >
+                                {team}
+                              </p>
+                              <p
+                                className={`text-sm ${
+                                  isUserTeam(index) ? "text-green-500" : ""
+                                }`}
+                              >
+                                {TEAMS[index]}
+                              </p>
                             </div>
                           </div>
-                          <p>500</p>
+                          <div className="flex flex-col items-end">
+                            <p
+                              className={`text-2xl font-bold ${getPositionColor(
+                                index
+                              )}`}
+                            >
+                              {getPositionText(index)}
+                            </p>
+                            <p
+                              className={`text-2xl ${getPositionColor(index)}`}
+                            >
+                              {getRewardText(index)}
+                            </p>
+                          </div>
                         </div>
                       </div>
                     ))}
@@ -200,8 +253,19 @@ export function ResultScreen() {
                           <div className="flex justify-between items-center flex-row">
                             <p className="mr-2 text-sm">{index + 4}</p>
                             <div className="flex flex-row">
-                              <p className="text-sm ml-1"> {team} - </p>
-                              <p className="text-sm">
+                              <p
+                                className={`text-sm ml-1 ${
+                                  isUserTeam(index) ? "text-green-500" : ""
+                                }`}
+                              >
+                                {" "}
+                                {team} -{" "}
+                              </p>
+                              <p
+                                className={`text-sm ${
+                                  isUserTeam(index) ? "text-green-500" : ""
+                                }`}
+                              >
                                 {" "}
                                 {TEAMS[index]
                                   .split(" ")[0]
@@ -228,8 +292,19 @@ export function ResultScreen() {
                           <div className="flex justify-between items-center flex-row">
                             <p className="mr-2 text-sm">{index + 13}</p>
                             <div className="flex flex-row">
-                              <p className="text-sm ml-1"> {team} - </p>
-                              <p className="text-sm">
+                              <p
+                                className={`text-sm ml-1 ${
+                                  isUserTeam(index) ? "text-green-500" : ""
+                                }`}
+                              >
+                                {" "}
+                                {team} -{" "}
+                              </p>
+                              <p
+                                className={`text-sm ${
+                                  isUserTeam(index) ? "text-green-500" : ""
+                                }`}
+                              >
                                 {" "}
                                 {TEAMS[index]
                                   .split(" ")[0]
@@ -246,7 +321,7 @@ export function ResultScreen() {
             )}
           </div>
         </CardContent>
-        <CardFooter className="flex flex-row justify-evenly p-0 m-0 pb-2 w-full">
+        <CardFooter className="flex flex-row justify-evenly p-0 m-0 pb-2 w-full mb-4">
           {playerStat?.pendingReward && (
             <MyModal
               texto="You have unclaimed points!"
@@ -254,18 +329,61 @@ export function ResultScreen() {
             />
           )}
 
-          <div className="flex flex-col justify-evenly">
-            <Button variant="outline" onClick={() => setScreen("main")}>
+          <div className="flex flex-col justify-evenly ">
+            <button
+              className="bg-red-600 px-4 py-2 rounded-full mb-1"
+              onClick={() => setScreen("main")}
+            >
               Return
-            </Button>
-            <Button onClick={() => console.log(raceData)}>HELP</Button>
+            </button>
+            <button
+              className="bg-purple-400 px-4 py-2 rounded-full"
+              onClick={() => console.log(raceData)}
+            >
+              HELP
+            </button>
           </div>
-          <Button
-            className="h-full w-[45%] bg-yellow-400"
-            onClick={() => console.log(raceData)}
-          >
-            Race Again!
-          </Button>
+          <div className="w-[50%]">
+            {playerStat?.pendingReward ? (
+              <button
+                className="h-[100%] w-auto text-4xl text-white px-4 py-2"
+                onClick={() => console.log("Claim rewards no implementado")}
+                style={{
+                  backgroundImage: "url('/buttons/yellow.png')",
+                  backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
+                  backgroundRepeat: "no-repeat", // Evita la repetición
+                  height: "auto",
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <p className="leading-[1] tracking-tight text-stroke-3">
+                  CLAIM <br /> REWARDS!
+                </p>
+              </button>
+            ) : (
+              <button
+                className="h-[100%] w-auto text-4xl text-white px-4 py-2"
+                onClick={() => setScreen("team")}
+                style={{
+                  backgroundImage: "url('/buttons/blue.png')",
+                  backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
+                  backgroundRepeat: "no-repeat", // Evita la repetición
+                  height: "auto",
+                  width: "100%",
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                }}
+              >
+                <p className="leading-[1] tracking-tight text-stroke-3">
+                  RACE <br /> AGAIN!
+                </p>
+              </button>
+            )}
+          </div>
         </CardFooter>
       </div>
     </div>

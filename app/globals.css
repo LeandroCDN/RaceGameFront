@@ -100,3 +100,20 @@
   text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black,
     1px 1px 0 black;
 }
+.text-stroke-2 {
+  text-shadow: 0px 0px 70px rgba(245, 215, 47, 0.6),
+    -0px -0px 70px rgba(241, 253, 70, 0.5),
+    10px 10px 40px rgba(220, 230, 92, 0.4);
+}
+
+.animated-title {
+  animation: shine 2s infinite linear;
+}
+
+@keyframes shine {
+  to {
+    background: linear-gradient(to right, #fff 50%, transparent 10%);
+    background-size: 200% 100%;
+    background-position: -100%;
+  }
+}
