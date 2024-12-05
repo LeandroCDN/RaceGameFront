@@ -165,7 +165,7 @@ export function ResultScreen() {
     <div
       className="w-full h-screen flex flex-col justify-between"
       style={{
-        backgroundImage: "url('/backgrounds/result.webp')",
+        backgroundImage: "url('/backgrounds/Result.webp')",
         backgroundSize: "cover",
         height: "100vh", // Ajusta la altura según sea necesario
         display: "flex",

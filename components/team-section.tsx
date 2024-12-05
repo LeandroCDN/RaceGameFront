@@ -55,7 +55,9 @@ const TEAMSRunners = [
 
 export function TeamSelection() {
   const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
-  const provider = new ethers.JsonRpcProvider(process.env.NEXT_PUBLIC_RPC_URL);
+  const provider = new ethers.JsonRpcProvider(
+    "https://worldchain-mainnet.g.alchemy.com/public"
+  );
   const [index, setIndex] = useState(0);
   const [raceData, setRaceData] = useState<{
     race: string[]; // Array of 20 addresses
@@ -72,7 +74,7 @@ export function TeamSelection() {
       type: "function",
     },
   ];
-  const raceAddress = process.env.NEXT_PUBLIC_RACE_ADDRESS;
+  const raceAddress = "0xee81998667679C0373786035877F959Aa8DBEF5c";
 
   const handleBuyTicket = async () => {
     if (!raceAddress) {
