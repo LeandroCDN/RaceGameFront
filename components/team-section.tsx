@@ -349,19 +349,52 @@ export function TeamSelection() {
             </div>
           </div>
         </CardContent>
-        <CardFooter className="grid grid-cols-2 gap-4 mb-4">
-          <Button
-            onClick={() => {
-              handleBuyWorker();
-            }}
-            disabled={!selectedTeam}
-            className="text-xl py-2 px-2"
-          >
-            Buy Race ticket
-          </Button>
-          <Button variant="outline" onClick={() => setScreen("main")}>
-            Quit
-          </Button>
+        <CardFooter className="flex flex-row justify-evenly p-0 m-0 pb-2 w-full mb-4">
+          <div className="flex flex-col justify-evenly ">
+            <button
+              className="h-auto  mb-2  bg-gray-400 px-6 rounded-full w-[100%]"
+              style={{
+                backgroundImage: "url('/buttons/yellow.png')",
+                backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
+                backgroundRepeat: "no-repeat", // Evita la repetición
+                height: "auto",
+                width: "full",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onClick={() => setScreen("main")}
+            >
+              Return
+            </button>
+            <button
+              className="bg-purple-400 px-4 py-2 rounded-full opacity-60 cursor-not-allowed"
+              onClick={() => console.log(raceData)}
+            >
+              Survivor!
+            </button>
+          </div>
+          <div className="w-[50%]">
+            <Button
+              onClick={() => {
+                handleBuyWorker();
+              }}
+              disabled={!selectedTeam}
+              className="h-auto  mb-2 py-4 px-6 text-4xl rounded-full w-[100%]"
+              style={{
+                backgroundImage: "url('/buttons/yellow.png')",
+                backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
+                backgroundRepeat: "no-repeat", // Evita la repetición
+                height: "auto",
+                width: "full",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              Buy ticket
+            </Button>
+          </div>
         </CardFooter>
       </div>
     </div>
