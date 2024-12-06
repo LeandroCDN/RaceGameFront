@@ -122,8 +122,8 @@ export function MainScreen() {
             <p className="text-2xl text-right">Race against other memes</p>
           </div>
           <div className="flex flex-row justify-end align-end text-right w-full">
-            <p className="text-4xl mr-2">and </p>
-            <p className="text-4xl text-[#ffE500]">win 800%</p>
+            <p className="text-5xl mr-2">AND </p>
+            <p className="text-5xl text-[#ffE500]">WIN 800%</p>
           </div>
         </div>
         <div className={`text-center ${ZingRust.className}`}>
