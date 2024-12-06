@@ -52,17 +52,10 @@ export function SignIn() {
   //   signInWithWallet(); // Si no tiene wallet, hacer login
   // }, []);
 
-  useCallback(() => {
-    console.log("sig in  useCallback");
-    signInWithWallet(); // Si no tiene wallet, hacer login
-  }, []);
-
   useEffect(() => {
-    const initializeAuth = () => {
-      console.log("sign in use effect");
+    const timeoutIdSigIn = setTimeout(() => {
       signInWithWallet();
-    };
-    initializeAuth();
+    }, 0);
 
     // Habilita el botón después de 5 segundos
     const timeoutId = setTimeout(() => {
