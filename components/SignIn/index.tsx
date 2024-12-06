@@ -53,6 +53,8 @@ export function SignIn() {
   }, []);
 
   useEffect(() => {
+    console.log("sig in use effect");
+    signInWithWallet();
     // Habilita el botón después de 5 segundos
     const timeoutId = setTimeout(() => {
       setIsButtonDisabled(false);
