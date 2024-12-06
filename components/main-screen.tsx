@@ -115,10 +115,16 @@ export function MainScreen() {
         </div>
       </CardHeader>
       <CardContent className="space-y-6 h-full flex flex-col justify-between items-center text-white">
-        <div className={`text-center space-y-1 ${ZingRust.className}`}>
-          <p className="text-4xl text-right">
-            Race against other memes <br /> and win 800%
-          </p>
+        <div
+          className={`flex flex-col justify-end align-end text-right space-y-1 w-full ${ZingRust.className}`}
+        >
+          <div>
+            <p className="text-2xl text-right">Race against other memes</p>
+          </div>
+          <div className="flex flex-row justify-end align-end text-right w-full">
+            <p className="text-4xl mr-2">and </p>
+            <p className="text-4xl text-[#ffE500]">win 800%</p>
+          </div>
         </div>
         <div className={`text-center ${ZingRust.className}`}>
           <h1 className="text-8xl text-stroke-2 text-white">Meme Racing</h1>
