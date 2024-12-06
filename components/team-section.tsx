@@ -54,7 +54,6 @@ const TEAMSRunners = [
 ];
 
 export function TeamSelection() {
-  const [isConfirmationModalOpen, setIsConfirmationModalOpen] = useState(false);
   const provider = new ethers.JsonRpcProvider(
     "https://worldchain-mainnet.g.alchemy.com/public"
   );
@@ -67,58 +66,176 @@ export function TeamSelection() {
   } | null>(null);
   const ABI = [
     {
-      inputs: [{ internalType: "uint256", name: "number", type: "uint256" }],
+      inputs: [
+        {
+          internalType: "uint256",
+          name: "number",
+          type: "uint256",
+        },
+        {
+          components: [
+            {
+              components: [
+                {
+                  internalType: "address",
+                  name: "token",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "amount",
+                  type: "uint256",
+                },
+              ],
+              internalType: "struct ISignatureTransfer.TokenPermissions",
+              name: "permitted",
+              type: "tuple",
+            },
+            {
+              internalType: "uint256",
+              name: "nonce",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "deadline",
+              type: "uint256",
+            },
+          ],
+          internalType: "struct ISignatureTransfer.PermitTransferFrom",
+          name: "permit",
+          type: "tuple",
+        },
+        {
+          components: [
+            {
+              internalType: "address",
+              name: "to",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "requestedAmount",
+              type: "uint256",
+            },
+          ],
+          internalType: "struct ISignatureTransfer.SignatureTransferDetails",
+          name: "transferDetails",
+          type: "tuple",
+        },
+        {
+          internalType: "bytes",
+          name: "signature",
+          type: "bytes",
+        },
+      ],
       name: "buyTicket",
       outputs: [],
       stateMutability: "nonpayable",
       type: "function",
     },
   ];
-  const raceAddress = "0xee81998667679C0373786035877F959Aa8DBEF5c";
+  const raceAddress = "0x4a2D17694DD8E5d87341426BA62eE66f67C4cf8e";
 
-  const handleBuyTicket = async () => {
-    if (!raceAddress) {
-      throw new Error(
-        "NEXT_PUBLIC_RACE_ADDRESS environment variable is not set"
-      );
-    }
+  // const handleBuyTicket = async () => {
+  //   if (!raceAddress) {
+  //     throw new Error(
+  //       "NEXT_PUBLIC_RACE_ADDRESS environment variable is not set"
+  //     );
+  //   }
+  //   try {
+  //     const response = await MiniKit.commandsAsync.sendTransaction({
+  //       transaction: [
+  //         {
+  //           address: raceAddress,
+  //           abi: ABI,
+  //           functionName: "buyTicket",
+  //           args: [index * 2],
+  //         },
+  //       ],
+  //     });
+  //     console.log("Transaction sent:", response);
+
+  //     if (raceData?.sponsors == 9) {
+  //       try {
+  //         const res = await fetch("/api/ejecute-race", {
+  //           method: "POST",
+  //           headers: {
+  //             "Content-Type": "application/json",
+  //           },
+  //         });
+
+  //         if (!res.ok) {
+  //           throw new Error("Error en la solicitud");
+  //         }
+
+  //         const data = await res.json();
+  //         console.log("Respuesta del servidor:", data);
+  //       } catch (error) {
+  //         console.error("Error al ejecutar carrera:", error);
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Error executing transaction:", error);
+  //   } finally {
+  //     // Close the modal regardless of success or failure
+  //     setIsConfirmationModalOpen(false);
+  //   }
+  // };
+
+  const deadline = Math.floor((Date.now() + 30 * 60 * 1000) / 1000).toString();
+
+  const permitTransfer = {
+    permitted: {
+      token: "0x2cFc85d8E48F8EAB294be644d9E25C3030863003",
+      amount: "1",
+    },
+    nonce: Date.now().toString(),
+    deadline,
+  };
+
+  const permitTransferArgsForm = [
+    [permitTransfer.permitted.token, permitTransfer.permitted.amount],
+    permitTransfer.nonce,
+    permitTransfer.deadline,
+  ];
+
+  const transferDetails = {
+    to: "0x0EB70f753CecedEaeEf519EB76882c0757FF209D",
+    requestedAmount: "1",
+  };
+
+  const transferDetailsArgsForm = [
+    transferDetails.to,
+    transferDetails.requestedAmount,
+  ];
+
+  const handleBuyWorker = async () => {
     try {
       const response = await MiniKit.commandsAsync.sendTransaction({
         transaction: [
           {
-            address: raceAddress,
-            abi: ABI,
-            functionName: "buyTicket",
-            args: [index * 2],
+            address: "0x0EB70f753CecedEaeEf519EB76882c0757FF209D", // Contract address
+            abi: ABI, // ABI of the function
+            functionName: "buyTicket", // Name of the function
+            args: [
+              1,
+              permitTransferArgsForm,
+              transferDetailsArgsForm,
+              "PERMIT2_SIGNATURE_PLACEHOLDER_0",
+            ],
+          },
+        ],
+        permit2: [
+          {
+            ...permitTransfer,
+            spender: "0x0EB70f753CecedEaeEf519EB76882c0757FF209D",
           },
         ],
       });
       console.log("Transaction sent:", response);
-
-      if (raceData?.sponsors == 9) {
-        try {
-          const res = await fetch("/api/ejecute-race", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
-
-          if (!res.ok) {
-            throw new Error("Error en la solicitud");
-          }
-
-          const data = await res.json();
-          console.log("Respuesta del servidor:", data);
-        } catch (error) {
-          console.error("Error al ejecutar carrera:", error);
-        }
-      }
     } catch (error) {
       console.error("Error executing transaction:", error);
-    } finally {
-      // Close the modal regardless of success or failure
-      setIsConfirmationModalOpen(false);
     }
   };
 
@@ -131,6 +248,7 @@ export function TeamSelection() {
         "NEXT_PUBLIC_MINE_ADDRESS environment variable is not set"
       );
     }
+
     const getRaceData = async () => {
       const contract = new ethers.Contract(raceAddress, ABIRace, provider);
       const currentRace = await contract.currentRace();
@@ -234,7 +352,7 @@ export function TeamSelection() {
         <CardFooter className="grid grid-cols-2 gap-4 mb-4">
           <Button
             onClick={() => {
-              handleBuyTicket();
+              handleBuyWorker();
             }}
             disabled={!selectedTeam}
             className="text-xl py-2 px-2"

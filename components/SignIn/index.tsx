@@ -1,7 +1,7 @@
 "use client";
 import { MiniKit } from "@worldcoin/minikit-js";
 import { useRouter } from "next/navigation";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { ZingRust } from "@/app/fonts";
 import "animate.css";
 
@@ -47,11 +47,6 @@ export function SignIn() {
     }
   };
 
-  // useEffect(() => {
-  //   console.log("sig in use effect");
-  //   signInWithWallet(); // Si no tiene wallet, hacer login
-  // }, []);
-
   useEffect(() => {
     const timeoutIdSigIn = setTimeout(() => {
       signInWithWallet();
@@ -61,7 +56,7 @@ export function SignIn() {
     const timeoutId = setTimeout(() => {
       signInWithWallet();
       setIsButtonDisabled(false);
-    }, 8000);
+    }, 5000);
 
     // Limpia el timeout si el componente se desmonta
     return () => clearTimeout(timeoutId);
