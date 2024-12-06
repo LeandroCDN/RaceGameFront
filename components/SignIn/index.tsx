@@ -47,17 +47,24 @@ export function SignIn() {
     }
   };
 
-  useEffect(() => {
-    console.log("sig in use effect");
-    signInWithWallet(); // Si no tiene wallet, hacer login
-  }, []);
+  // useEffect(() => {
+  //   console.log("sig in use effect");
+  //   signInWithWallet(); // Si no tiene wallet, hacer login
+  // }, []);
 
   useEffect(() => {
-    console.log("sig in use effect");
-    signInWithWallet();
+    console.log("sign in use effect");
+
+    const initializeAuth = async () => {
+      if (MiniKit.isInstalled()) {
+        await signInWithWallet();
+      }
+    };
+    initializeAuth();
     // Habilita el botón después de 5 segundos
     const timeoutId = setTimeout(() => {
       setIsButtonDisabled(false);
+      console.log("sign in use effect");
     }, 8000);
 
     // Limpia el timeout si el componente se desmonta
