@@ -362,6 +362,7 @@ export function TeamSelection() {
                 display: "flex",
                 justifyContent: "center",
                 alignItems: "center",
+                filter: "grayscale(100%)",
               }}
               onClick={() => setScreen("main")}
             >
