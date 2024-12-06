@@ -95,7 +95,7 @@ export function MainScreen() {
         alignItems: "center",
       }}
     >
-      <CardHeader className="flex flex-row text-white w-full justify-end">
+      <CardHeader className="flex flex-row text-white w-full justify-end p-2">
         <div
           className="rounded-full flex justify-end items-center align-middle w-full pr-2"
           style={{
@@ -114,9 +114,14 @@ export function MainScreen() {
           </span>
         </div>
       </CardHeader>
-      <CardContent className="space-y-6 h-full flex flex-col justify-center items-center text-white">
+      <CardContent className="space-y-6 h-full flex flex-col justify-between items-center text-white">
         <div className={`text-center space-y-1 ${ZingRust.className}`}>
-          <h1 className="text-8xl text-stroke-2 text-white ">Meme Racing</h1>
+          <p className="text-4xl text-right">
+            Race against other memes <br /> and win 800%
+          </p>
+        </div>
+        <div className={`text-center ${ZingRust.className}`}>
+          <h1 className="text-8xl text-stroke-2 text-white">Meme Racing</h1>
         </div>
         <div className="space-y-4 ">
           <button
@@ -151,6 +156,7 @@ export function MainScreen() {
             }}
           ></div>
         </div>
+        <div></div>
       </CardContent>
       <CardFooter className="">
         <button
