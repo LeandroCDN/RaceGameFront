@@ -137,7 +137,7 @@ export function ResultScreen() {
 
       await setPlayerStat(playerStatData);
       console.log("Player:", playerStatData);
-      const vRaceInfo = await contract.vRace(0);
+      const vRaceInfo = await contract.vRace(1);
 
       const raceInfoData = {
         race: vRaceInfo[0],
@@ -190,7 +190,7 @@ export function ResultScreen() {
   };
 
   const getPositionColor = (index: number) => {
-    const colors = ["text-red-500", "text-yellow-500", "text-purple-500"];
+    const colors = ["text-[#FFE500]", "text-[#B2AFAF]", "text-[#E28202]"];
     return colors[index];
   };
 
@@ -221,9 +221,7 @@ export function ResultScreen() {
                       <div
                         key={team}
                         className={`p-2 mb-2 rounded text-white ${
-                          isUserTeam(index)
-                            ? "text-green-500"
-                            : "text-green-500"
+                          isUserTeam(index) ? "text-green-500" : ""
                         }`}
                       >
                         <div className="flex justify-between items-center flex-row">
@@ -263,14 +261,16 @@ export function ResultScreen() {
                           </div>
                           <div className="flex flex-col items-end">
                             <p
-                              className={`text-2xl font-bold ${getPositionColor(
+                              className={`text-2xl font-bold text-stroke-3 ${getPositionColor(
                                 index
                               )}`}
                             >
                               {getPositionText(index)}
                             </p>
                             <p
-                              className={`text-2xl ${getPositionColor(index)}`}
+                              className={`text-2xl text-stroke-3 ${getPositionColor(
+                                index
+                              )}`}
                             >
                               {getRewardText(index)}
                             </p>
@@ -360,12 +360,15 @@ export function ResultScreen() {
         </CardContent>
         <CardFooter className="flex flex-row justify-evenly p-0 m-0 pb-2 w-full mb-4">
           {playerStat?.pendingReward && (
-            <MyModal texto="You have unclaimed points!" numero={8} />
+            <MyModal
+              texto="You have unclaimed points!"
+              numero={playerStat?.unclaimedPrizes / 100}
+            />
           )}
 
           <div className="flex flex-col justify-evenly ">
             <button
-              className="h-auto  mb-2 py-1  bg-gray-400 px-6 rounded-full w-[100%]"
+              className="h-auto text-white text-shadow-3 mb-2 py-1  bg-gray-400 px-6 rounded-full w-[100%]"
               style={{
                 backgroundImage: "url('/buttons/yellow.png')",
                 backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
@@ -379,10 +382,10 @@ export function ResultScreen() {
               }}
               onClick={() => router.push("/race")}
             >
-              Return
+              RETURN
             </button>
             <button
-              className="h-auto  mb-2 py-1  text-white px-6 rounded-full opacity-60 w-[100%]"
+              className="h-auto py-1  text-white px-6 rounded-full text-shadow-3 opacity-60 w-[100%]"
               style={{
                 backgroundImage: "url('/buttons/blue.png')",
                 backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
@@ -395,16 +398,16 @@ export function ResultScreen() {
               }}
               onClick={() => router.push("/race")}
             >
-              Survivor
+              SURVIVOR
             </button>
           </div>
           <div className="w-[50%]">
             {playerStat?.pendingReward ? (
               <button
-                className="h-[100%] w-auto text-4xl text-white px-4 py-2"
+                className="h-[100%] w-auto text-3xl text-white px-4 py-2"
                 onClick={handleClaim}
                 style={{
-                  backgroundImage: "url('/buttons/claim-bg.webp')",
+                  backgroundImage: "url('/buttons/claimgreen.webp')",
                   backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
                   backgroundRepeat: "no-repeat", // Evita la repetición
                   height: "auto",
@@ -420,13 +423,13 @@ export function ResultScreen() {
               </button>
             ) : (
               <button
-                className="h-[100%] w-auto text-4xl text-white px-4 py-2"
+                className="h-[100%] w-auto text-3xl text-white px-4 py-2"
                 onClick={() => router.push("/team")}
                 style={{
                   backgroundImage: "url('/buttons/yellow.png')",
                   backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
                   backgroundRepeat: "no-repeat", // Evita la repetición
-                  height: "auto",
+                  height: "84px",
                   width: "100%",
                   display: "flex",
                   justifyContent: "center",

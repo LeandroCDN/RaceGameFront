@@ -353,9 +353,9 @@ export function TeamSelection() {
           </div>
         </CardContent>
         <CardFooter className="flex flex-row justify-evenly p-0 m-0 pb-2 w-full mb-4">
-          <div className="flex flex-col justify-evenly ">
+          <div className="flex flex-col justify-between h-full ">
             <button
-              className="h-auto  mb-2 py-1  bg-gray-400 px-6 rounded-full w-[100%]"
+              className="h-auto  mb-2 py-1 text-shadow-3 text-white bg-gray-400 px-6 rounded-full w-[100%]"
               style={{
                 backgroundImage: "url('/buttons/yellow.png')",
                 backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
@@ -369,10 +369,10 @@ export function TeamSelection() {
               }}
               onClick={() => router.push("/race")}
             >
-              Return
+              RETURN
             </button>
             <button
-              className="h-auto  mb-2 py-1  text-white px-6 rounded-full opacity-60 w-[100%]"
+              className="h-auto py-1  text-white px-6 rounded-full text-shadow-3 opacity-60 w-[100%]"
               style={{
                 backgroundImage: "url('/buttons/blue.png')",
                 backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
@@ -385,21 +385,21 @@ export function TeamSelection() {
               }}
               onClick={() => router.push("/race")}
             >
-              Survivor
+              SURVIVOR
             </button>
           </div>
           <div className="w-[50%]">
             <Button
               onClick={() => {
-                handleBuyWorker();
+                launchGame();
               }}
-              disabled={!selectedTeam}
+              disabled={false}
               className="h-auto  py-4 px-6 text-3xl rounded-full w-[100%] "
               style={{
                 backgroundImage: "url('/buttons/yellow.png')",
                 backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
                 backgroundRepeat: "no-repeat", // Evita la repetición
-                height: "auto",
+                height: "84px",
                 width: "full",
                 display: "flex",
                 justifyContent: "center",

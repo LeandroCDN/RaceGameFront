@@ -137,7 +137,11 @@ export function MainScreen() {
           <button
             onClick={() => router.push("/team")}
             disabled={!(playerStat && playerStat.unclaimedPoints <= 0)}
-            className="h-auto  mb-2 py-4 px-6 text-4xl rounded-full w-[100%]"
+            className={`h-auto  mb-2 py-4 px-6 text-4xl rounded-full w-[100%] ${
+              playerStat && playerStat.unclaimedPoints > 0
+                ? "opacity-40 cursor-not-allowed"
+                : ""
+            }`}
             style={{
               backgroundImage: "url('/buttons/yellow.png')",
               backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
