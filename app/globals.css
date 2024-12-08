@@ -96,6 +96,12 @@
   scrollbar-width: none;
 }
 
+.text-shadow-3 {
+  text-shadow: 0px 0px 10px rgba(0, 0, 0, 0.392),
+    0px 0px 20px rgba(0, 0, 0, 0.283);
+}
+
+
 .text-stroke-3 {
   text-shadow: -1px -1px 0 black, 1px -1px 0 black, -1px 1px 0 black,
     1px 1px 0 black;

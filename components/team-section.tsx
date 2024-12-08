@@ -1,22 +1,16 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardFooter,
-  CardHeader,
-} from "@/components/ui/card";
+import { CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Coins } from "lucide-react";
-import { useGame } from "./game-provider";
+
 import { MiniKit } from "@worldcoin/minikit-js";
 import { useEffect, useState } from "react";
 import { ethers } from "ethers";
 import ABIRace from "@/public/ABIS/RACEABI.json";
-import { ConfirmationScreen } from "./confirmation-screen";
-import MyModal from "./modal";
-import ConfirmationModal from "./confirmation-modal";
 import { ZingRust } from "@/app/fonts";
+import { useRouter } from "next/navigation";
+import { useGame } from "./game-provider";
 
 const TEAMS = [
   "Ribbit Racing",
@@ -54,6 +48,7 @@ const TEAMSRunners = [
 ];
 
 export function TeamSelection() {
+  const router = useRouter();
   const provider = new ethers.JsonRpcProvider(
     "https://worldchain-mainnet.g.alchemy.com/public"
   );
@@ -135,60 +130,13 @@ export function TeamSelection() {
       type: "function",
     },
   ];
-  const raceAddress = "0x4a2D17694DD8E5d87341426BA62eE66f67C4cf8e";
-
-  // const handleBuyTicket = async () => {
-  //   if (!raceAddress) {
-  //     throw new Error(
-  //       "NEXT_PUBLIC_RACE_ADDRESS environment variable is not set"
-  //     );
-  //   }
-  //   try {
-  //     const response = await MiniKit.commandsAsync.sendTransaction({
-  //       transaction: [
-  //         {
-  //           address: raceAddress,
-  //           abi: ABI,
-  //           functionName: "buyTicket",
-  //           args: [index * 2],
-  //         },
-  //       ],
-  //     });
-  //     console.log("Transaction sent:", response);
-
-  //     if (raceData?.sponsors == 9) {
-  //       try {
-  //         const res = await fetch("/api/ejecute-race", {
-  //           method: "POST",
-  //           headers: {
-  //             "Content-Type": "application/json",
-  //           },
-  //         });
-
-  //         if (!res.ok) {
-  //           throw new Error("Error en la solicitud");
-  //         }
-
-  //         const data = await res.json();
-  //         console.log("Respuesta del servidor:", data);
-  //       } catch (error) {
-  //         console.error("Error al ejecutar carrera:", error);
-  //       }
-  //     }
-  //   } catch (error) {
-  //     console.error("Error executing transaction:", error);
-  //   } finally {
-  //     // Close the modal regardless of success or failure
-  //     setIsConfirmationModalOpen(false);
-  //   }
-  // };
-
+  const raceAddress = "0x3FaDdb94F6add3645eF1396eb780EC6EDCaA92Fd";
   const deadline = Math.floor((Date.now() + 30 * 60 * 1000) / 1000).toString();
 
   const permitTransfer = {
     permitted: {
       token: "0x2cFc85d8E48F8EAB294be644d9E25C3030863003",
-      amount: "1",
+      amount: "100",
     },
     nonce: Date.now().toString(),
     deadline,
@@ -201,8 +149,8 @@ export function TeamSelection() {
   ];
 
   const transferDetails = {
-    to: "0x0EB70f753CecedEaeEf519EB76882c0757FF209D",
-    requestedAmount: "1",
+    to: "0x3FaDdb94F6add3645eF1396eb780EC6EDCaA92Fd",
+    requestedAmount: "100",
   };
 
   const transferDetailsArgsForm = [
@@ -215,11 +163,11 @@ export function TeamSelection() {
       const response = await MiniKit.commandsAsync.sendTransaction({
         transaction: [
           {
-            address: "0x0EB70f753CecedEaeEf519EB76882c0757FF209D", // Contract address
+            address: "0x3FaDdb94F6add3645eF1396eb780EC6EDCaA92Fd", // Contract address
             abi: ABI, // ABI of the function
             functionName: "buyTicket", // Name of the function
             args: [
-              1,
+              index,
               permitTransferArgsForm,
               transferDetailsArgsForm,
               "PERMIT2_SIGNATURE_PLACEHOLDER_0",
@@ -229,18 +177,37 @@ export function TeamSelection() {
         permit2: [
           {
             ...permitTransfer,
-            spender: "0x0EB70f753CecedEaeEf519EB76882c0757FF209D",
+            spender: "0x3FaDdb94F6add3645eF1396eb780EC6EDCaA92Fd",
           },
         ],
       });
       console.log("Transaction sent:", response);
+
+      if (raceData?.sponsors == 9) {
+        try {
+          const res = await fetch("/api/ejecute-race", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+          });
+
+          if (!res.ok) {
+            throw new Error("Error en la solicitud");
+          }
+
+          const data = await res.json();
+          console.log("Respuesta del servidor:", data);
+        } catch (error) {
+          console.error("Error al ejecutar carrera:", error);
+        }
+      }
     } catch (error) {
       console.error("Error executing transaction:", error);
     }
   };
 
-  const { screen, setScreen, credits, selectedTeam, setSelectedTeam } =
-    useGame();
+  const { selectedTeam, setSelectedTeam } = useGame();
 
   useEffect(() => {
     if (!raceAddress) {
@@ -261,12 +228,55 @@ export function TeamSelection() {
       };
       console.log("vRaceInfo:", vRaceInfo);
       setRaceData(raceInfoData);
+      // if (vRaceInfo[2] == 10) {
+      //   await launchGame();
+      // }
+    };
+
+    const launchGame = async () => {
+      try {
+        const res = await fetch("/api/ejecute-race", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        });
+
+        if (!res.ok) {
+          throw new Error("Error en la solicitud");
+        }
+
+        const data = await res.json();
+        console.log("Respuesta del servidor:", data);
+      } catch (error) {
+        console.error("Error al ejecutar carrera:", error);
+      }
     };
 
     getRaceData();
   }, []);
 
-  if (screen !== "team") return null;
+  const launchGame = async () => {
+    try {
+      const res = await fetch("/api/ejecute-race", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (!res.ok) {
+        throw new Error("Error en la solicitud");
+      }
+
+      const data = await res.json();
+      console.log("Respuesta del servidor:", data);
+    } catch (error) {
+      console.error("Error al ejecutar carrera:", error);
+    }
+  };
+
+  // if (screen !== "team") return null;
 
   const isAvailable = (teamIndex: number) => {
     // Check if the corresponding address in raceData.race is empty (0x000...)
@@ -280,7 +290,7 @@ export function TeamSelection() {
     <div
       className="w-full h-screen flex flex-col justify-between"
       style={{
-        backgroundImage: "url('/backgrounds/game-bg.webp')",
+        backgroundImage: "url('/backgrounds/Result.webp')",
         backgroundSize: "cover",
         height: "100vh", // Ajusta la altura según sea necesario
         display: "flex",
@@ -290,13 +300,6 @@ export function TeamSelection() {
     >
       <div className="w-full  h-full">
         <CardHeader className="flex flex-col items-center p-0 pt-2 mb-6">
-          <div className="flex flex-row items-center justify-between">
-            <div className="text-sm">Username</div>
-            <div className="flex items-center gap-1">
-              <Coins className="w-4 h-4" />
-              <span>{credits.toFixed(2)}</span>
-            </div>
-          </div>
           <div className={` ${ZingRust.className}`}>
             <p className="text-5xl text-white">SELECT YOUR TEAM</p>
           </div>
@@ -325,7 +328,7 @@ export function TeamSelection() {
                       }
                     }}
                     style={{
-                      backgroundImage: `url('/runners/${teamIndex}.png')`,
+                      backgroundImage: `url('/runners/${teamIndex}.webp')`,
                       backgroundSize: "125% auto",
                       backgroundPosition: "center",
                       backgroundRepeat: "no-repeat",
@@ -352,7 +355,7 @@ export function TeamSelection() {
         <CardFooter className="flex flex-row justify-evenly p-0 m-0 pb-2 w-full mb-4">
           <div className="flex flex-col justify-evenly ">
             <button
-              className="h-auto  mb-2  bg-gray-400 px-6 rounded-full w-[100%]"
+              className="h-auto  mb-2 py-1  bg-gray-400 px-6 rounded-full w-[100%]"
               style={{
                 backgroundImage: "url('/buttons/yellow.png')",
                 backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
@@ -364,15 +367,25 @@ export function TeamSelection() {
                 alignItems: "center",
                 filter: "grayscale(100%)",
               }}
-              onClick={() => setScreen("main")}
+              onClick={() => router.push("/race")}
             >
               Return
             </button>
             <button
-              className="bg-purple-400 px-4 py-2 rounded-full opacity-60 cursor-not-allowed"
-              onClick={() => console.log(raceData)}
+              className="h-auto  mb-2 py-1  text-white px-6 rounded-full opacity-60 w-[100%]"
+              style={{
+                backgroundImage: "url('/buttons/blue.png')",
+                backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
+                backgroundRepeat: "no-repeat", // Evita la repetición
+                height: "auto",
+                width: "full",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onClick={() => router.push("/race")}
             >
-              Survivor!
+              Survivor
             </button>
           </div>
           <div className="w-[50%]">
@@ -381,7 +394,7 @@ export function TeamSelection() {
                 handleBuyWorker();
               }}
               disabled={!selectedTeam}
-              className="h-auto  mb-2 py-4 px-6 text-4xl rounded-full w-[100%]"
+              className="h-auto  py-4 px-6 text-3xl rounded-full w-[100%] "
               style={{
                 backgroundImage: "url('/buttons/yellow.png')",
                 backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
@@ -393,7 +406,7 @@ export function TeamSelection() {
                 alignItems: "center",
               }}
             >
-              Buy ticket
+              <p className="text-white text-shadow-3">BUY TICKET</p>
             </Button>
           </div>
         </CardFooter>

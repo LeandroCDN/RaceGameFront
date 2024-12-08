@@ -1,8 +1,6 @@
 "use client";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { useGame } from "./game-provider";
+import { CardContent, CardFooter } from "@/components/ui/card";
 import { MiniKit } from "@worldcoin/minikit-js";
 import { ethers } from "ethers";
 import ABIRace from "@/public/ABIS/RACEABI.json";
@@ -10,16 +8,19 @@ import { useState, useEffect, use } from "react";
 import Image from "next/image";
 import MyModal from "./modal";
 import { ZingRust } from "@/app/fonts";
+import { useRouter } from "next/navigation";
 
 export function ResultScreen() {
-  const { screen, setScreen, selectedTeam } = useGame();
+  const router = useRouter();
+  // const { screen, setScreen, selectedTeam } = useGame();
   const [playerStat, setPlayerStat] = useState<{
     points: number;
     pendingReward: boolean;
-    raceIdReward: number;
-    racesIds: number[];
+    lastRaceId: number;
     unclaimedPoints: number;
+    unclaimedPrizes: number;
     numbers: number[];
+    totalBuys: number;
   } | null>(null);
 
   const [raceData, setRaceData] = useState<{
@@ -31,7 +32,7 @@ export function ResultScreen() {
   const provider = new ethers.JsonRpcProvider(
     "https://worldchain-mainnet.g.alchemy.com/public"
   );
-  const raceAddress = "0xee81998667679C0373786035877F959Aa8DBEF5c";
+  const raceAddress = "0x3FaDdb94F6add3645eF1396eb780EC6EDCaA92Fd";
   const TEAMS = [
     "Ribbit Racing",
     "Ribbit Racing",
@@ -127,13 +128,14 @@ export function ResultScreen() {
       const playerStatData = {
         points: Number(playerInfo[0]),
         pendingReward: playerInfo[1],
-        raceIdReward: Number(playerInfo[2]),
-        racesIds: playerInfo[3].map(Number),
-        unclaimedPoints: Number(playerInfo[4]),
+        lastRaceId: Number(playerInfo[2]),
+        unclaimedPoints: Number(playerInfo[3]),
+        unclaimedPrizes: Number(playerInfo[4]),
         numbers: playerInfo[5].map(Number),
+        totalBuys: Number(playerInfo[6]),
       };
 
-      setPlayerStat(playerStatData);
+      await setPlayerStat(playerStatData);
       console.log("Player:", playerStatData);
       const vRaceInfo = await contract.vRace(0);
 
@@ -192,8 +194,6 @@ export function ResultScreen() {
     return colors[index];
   };
 
-  if (screen !== "result") return null;
-
   return (
     <div
       className="w-full h-screen flex flex-col justify-between"
@@ -208,7 +208,7 @@ export function ResultScreen() {
     >
       <div className="w-full h-screen flex flex-col justify-between items-center p-0 m-0">
         <div className={` ${ZingRust.className}`}>
-          <h1 className="text-6xl text-white"> Race Result</h1>
+          <h1 className="text-6xl text-white">Race Result</h1>
         </div>
         <CardContent className="p-0 m-0">
           <div className=" text-center mt-4 w-screen">
@@ -257,7 +257,7 @@ export function ResultScreen() {
                                   isUserTeam(index) ? "text-green-500" : ""
                                 }`}
                               >
-                                {TEAMS[index]}
+                                {TEAMS[TEAMSRunners.indexOf(team)]}
                               </p>
                             </div>
                           </div>
@@ -288,9 +288,7 @@ export function ResultScreen() {
                         <div
                           key={team}
                           className={` ${
-                            isUserTeam(index + 3)
-                              ? " font-semibold"
-                              : "bg-gray-100"
+                            isUserTeam(index + 3) ? " font-semibold" : ""
                           }`}
                         >
                           <div className="flex justify-between items-center flex-row">
@@ -310,7 +308,7 @@ export function ResultScreen() {
                                 }`}
                               >
                                 {" "}
-                                {TEAMS[index]
+                                {TEAMS[TEAMSRunners.indexOf(team)]
                                   .split(" ")[0]
                                   .substring(0, 3)
                                   .toUpperCase()}{" "}
@@ -327,9 +325,7 @@ export function ResultScreen() {
                         <div
                           key={team}
                           className={` ${
-                            isUserTeam(index + 12)
-                              ? " font-semibold"
-                              : "bg-gray-100"
+                            isUserTeam(index + 12) ? " font-semibold" : ""
                           }`}
                         >
                           <div className="flex justify-between items-center flex-row">
@@ -340,19 +336,17 @@ export function ResultScreen() {
                                   isUserTeam(index) ? "text-green-500" : ""
                                 }`}
                               >
-                                {" "}
-                                {team} -{" "}
+                                {team} -
                               </p>
                               <p
                                 className={`text-sm ${
                                   isUserTeam(index) ? "text-green-500" : ""
                                 }`}
                               >
-                                {" "}
-                                {TEAMS[index]
+                                {TEAMS[TEAMSRunners.indexOf(team)]
                                   .split(" ")[0]
                                   .substring(0, 3)
-                                  .toUpperCase()}{" "}
+                                  .toUpperCase()}
                               </p>
                             </div>
                           </div>
@@ -366,24 +360,42 @@ export function ResultScreen() {
         </CardContent>
         <CardFooter className="flex flex-row justify-evenly p-0 m-0 pb-2 w-full mb-4">
           {playerStat?.pendingReward && (
-            <MyModal
-              texto="You have unclaimed points!"
-              numero={playerStat.unclaimedPoints}
-            />
+            <MyModal texto="You have unclaimed points!" numero={8} />
           )}
 
           <div className="flex flex-col justify-evenly ">
             <button
-              className="bg-red-600 px-4 py-2 rounded-full mb-1"
-              onClick={() => setScreen("main")}
+              className="h-auto  mb-2 py-1  bg-gray-400 px-6 rounded-full w-[100%]"
+              style={{
+                backgroundImage: "url('/buttons/yellow.png')",
+                backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
+                backgroundRepeat: "no-repeat", // Evita la repetición
+                height: "auto",
+                width: "full",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                filter: "grayscale(100%)",
+              }}
+              onClick={() => router.push("/race")}
             >
               Return
             </button>
             <button
-              className="bg-purple-400 px-4 py-2 rounded-full opacity-60 cursor-not-allowed"
-              onClick={() => console.log(raceData)}
+              className="h-auto  mb-2 py-1  text-white px-6 rounded-full opacity-60 w-[100%]"
+              style={{
+                backgroundImage: "url('/buttons/blue.png')",
+                backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
+                backgroundRepeat: "no-repeat", // Evita la repetición
+                height: "auto",
+                width: "full",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+              onClick={() => router.push("/race")}
             >
-              Survivor!
+              Survivor
             </button>
           </div>
           <div className="w-[50%]">
@@ -392,7 +404,7 @@ export function ResultScreen() {
                 className="h-[100%] w-auto text-4xl text-white px-4 py-2"
                 onClick={handleClaim}
                 style={{
-                  backgroundImage: "url('/buttons/blue.png')",
+                  backgroundImage: "url('/buttons/claim-bg.webp')",
                   backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
                   backgroundRepeat: "no-repeat", // Evita la repetición
                   height: "auto",
@@ -402,14 +414,14 @@ export function ResultScreen() {
                   alignItems: "center",
                 }}
               >
-                <p className="leading-[1] tracking-tight text-stroke-3">
+                <p className="leading-[1] tracking-tight text-shadow-3">
                   CLAIM <br /> REWARDS!
                 </p>
               </button>
             ) : (
               <button
                 className="h-[100%] w-auto text-4xl text-white px-4 py-2"
-                onClick={() => setScreen("team")}
+                onClick={() => router.push("/team")}
                 style={{
                   backgroundImage: "url('/buttons/yellow.png')",
                   backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
@@ -421,7 +433,7 @@ export function ResultScreen() {
                   alignItems: "center",
                 }}
               >
-                <p className="leading-[1] tracking-tight text-stroke-3">
+                <p className="leading-[0.9] tracking-tight text-shadow-3">
                   RACE <br /> AGAIN!
                 </p>
               </button>

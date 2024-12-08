@@ -7,29 +7,33 @@ import {
   CardFooter,
   CardHeader,
 } from "@/components/ui/card";
-import { useGame } from "./game-provider";
 import ABI from "@/public/ABIS/RACEABI.json";
 import WLDABI from "@/public/ABIS/WLD.json";
 import { useState, useEffect } from "react";
 import { ethers } from "ethers";
 import { MiniKit } from "@worldcoin/minikit-js";
 import { ZingRust } from "@/app/fonts";
+import { useRouter } from "next/navigation";
 
 export function MainScreen() {
-  const { screen, setScreen, credits } = useGame();
+  const router = useRouter();
+
   const [points, setPoints] = useState<number | null>(0);
   const [balance, setBalance] = useState<string | null>("0");
   const [playerStat, setPlayerStat] = useState<{
     points: number;
     pendingReward: boolean;
-    raceIdReward: number;
-    racesIds: number[];
+    lastRaceId: number;
     unclaimedPoints: number;
+    unclaimedPrizes: number;
     numbers: number[];
+    totalBuys: number;
   } | null>(null);
   const RPC = process.env.NEXT_PUBLIC_RPC_URL;
-  const provider = new ethers.JsonRpcProvider(RPC);
-  const raceAddress = process.env.NEXT_PUBLIC_RACE_ADDRESS;
+  const provider = new ethers.JsonRpcProvider(
+    "https://worldchain-mainnet.g.alchemy.com/public"
+  );
+  const raceAddress = "0x3FaDdb94F6add3645eF1396eb780EC6EDCaA92Fd";
   const wldAddress = "0x2cFc85d8E48F8EAB294be644d9E25C3030863003";
 
   const getPoints = async () => {
@@ -38,8 +42,9 @@ export function MainScreen() {
         "NEXT_PUBLIC_MINE_ADDRESS environment variable is not set"
       );
     }
-    console.log(MiniKit.user);
-    console.log(MiniKit.appId);
+    console.log("user minikit", MiniKit.user);
+    console.log("appId minikit", MiniKit.appId);
+    console.log("walletAddress minikit", MiniKit.walletAddress);
     try {
       const contract = new ethers.Contract(raceAddress, ABI, provider);
       const userAddress = MiniKit.walletAddress;
@@ -50,23 +55,24 @@ export function MainScreen() {
       // 1 decimal in ether
       const wldBalanceInEther = ethers.formatEther(wldBalance);
       const wldBalanceFormatted = parseFloat(wldBalanceInEther).toFixed(1);
-
       setBalance(wldBalanceFormatted.toString());
+      console.log("wldBalanceFormatted", wldBalanceFormatted);
 
       const playerInfo = await contract.vPlayerInfo(userAddress);
-
+      console.log("playerInfo", playerInfo);
       // Estructurar la información del jugador
       const playerStatData = {
         points: Number(playerInfo[0]),
         pendingReward: playerInfo[1],
-        raceIdReward: Number(playerInfo[2]),
-        racesIds: playerInfo[3].map(Number),
-        unclaimedPoints: Number(playerInfo[4]),
+        lastRaceId: Number(playerInfo[2]),
+        unclaimedPoints: Number(playerInfo[3]),
+        unclaimedPrizes: Number(playerInfo[4]),
         numbers: playerInfo[5].map(Number),
+        totalBuys: Number(playerInfo[6]),
       };
-
-      setPlayerStat(playerStatData);
+      await setPlayerStat(playerStatData);
       setPoints(playerStatData.points);
+      console.log("Player:", playerStat);
 
       const currentRace = await contract.currentRace();
       const vRaceInfo = await contract.vRace(currentRace);
@@ -80,8 +86,6 @@ export function MainScreen() {
   useEffect(() => {
     getPoints();
   }, []);
-
-  if (screen !== "main") return null;
 
   return (
     <div
@@ -131,26 +135,27 @@ export function MainScreen() {
         </div>
         <div className="space-y-4 ">
           <button
-            onClick={() => setScreen("team")}
+            onClick={() => router.push("/team")}
+            disabled={!(playerStat && playerStat.unclaimedPoints <= 0)}
             className="h-auto  mb-2 py-4 px-6 text-4xl rounded-full w-[100%]"
             style={{
               backgroundImage: "url('/buttons/yellow.png')",
               backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
               backgroundRepeat: "no-repeat", // Evita la repetición
-              height: "auto",
+              height: "84px",
               width: "full",
               display: "flex",
               justifyContent: "center",
               alignItems: "center",
             }}
           >
-            Quick Race
+            <p className="text-shadow-3">QUICK RACE</p>
           </button>
           <div
             // onClick={() => setScreen("team")}
-            className="rounded-full w-9 h-9 p-0  opacity-60 cursor-not-allowed"
+            className="rounded-full w-9 h-9 p-0  opacity-60 text-white cursor-not-allowed"
             style={{
-              backgroundImage: "url('/buttons/blue-full.png')",
+              backgroundImage: "url('/buttons/blue.png')",
               backgroundSize: "100% 100%",
               backgroundRepeat: "no-repeat",
               height: "84px",
@@ -160,39 +165,42 @@ export function MainScreen() {
               justifyContent: "center",
               alignItems: "center",
             }}
-          ></div>
+          >
+            <p className="leading-[0.9] tracking-tight text-4xl text-shadow-3">
+              SURVIVOR <br />
+              <p className="text-xl text-center text-shadow-3">(COMING SOON)</p>
+            </p>
+          </div>
+
+          <button
+            onClick={() => router.push("/result")}
+            disabled={!(playerStat && playerStat.unclaimedPoints > 0)}
+            className={` w-[100%] h-auto text-3xl ${
+              playerStat && playerStat.unclaimedPoints > 0
+                ? "border-green-500 text-2xl text-green-300 drop-shadow-[0_0_20px_rgba(255,215,0,0.5)]"
+                : "opacity-40 cursor-not-allowed"
+            }`}
+            style={{
+              backgroundImage: "url('/buttons/claimgreen.webp')",
+              backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
+              backgroundRepeat: "no-repeat", // Evita la repetición
+              height: "84px",
+              width: "full",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div
+              className={`text-white leading-[0.9] tracking-tight text-shadow-3`}
+            >
+              CLAIM <br /> REWARDS
+            </div>
+          </button>
         </div>
         <div></div>
       </CardContent>
-      <CardFooter className="">
-        <button
-          onClick={() => setScreen("result")}
-          className={`h-auto rounded-full w-[100%] border border-black px-4 py-1${
-            playerStat && playerStat.unclaimedPoints > 0
-              ? "bg-green-100 border-green-500"
-              : ""
-          }`}
-          style={{
-            backgroundImage: "url('/buttons/gray.png')",
-            backgroundSize: "auto 100%", // Asegura que la imagen cubra todo el botón
-            backgroundRepeat: "no-repeat", // Evita la repetición
-            height: "auto",
-            width: "full",
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          <div className="font-medium">Last Race</div>
-          <div className="text-sm text-muted-foreground">
-            {playerStat && playerStat.unclaimedPoints > 0 && (
-              <span className="ml-2 text-xl text-green-600">
-                Unclaimed Rewards: {playerStat.unclaimedPoints}
-              </span>
-            )}
-          </div>
-        </button>
-      </CardFooter>
+      <CardFooter className="w-full flex justify-center"></CardFooter>
     </div>
   );
 }

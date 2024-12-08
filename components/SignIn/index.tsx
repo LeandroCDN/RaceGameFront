@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { ZingRust } from "@/app/fonts";
 import "animate.css";
+import MyModal from "../modal";
 
 export function SignIn() {
   const router = useRouter();
@@ -80,6 +81,7 @@ export function SignIn() {
     >
       <div className="flex flex-col w-screen h-screen items-center justify-between">
         <div></div>
+
         <div className={ZingRust.className}>
           <h1 className=" text-center text-white text-8xl mb-4 animate__animated animate__pulse animate__slow animate__infinite">
             MEME RACING

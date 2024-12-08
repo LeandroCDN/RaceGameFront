@@ -1,11 +1,10 @@
 "use client";
-
-import { MainScreen } from "@/components/main-screen";
+import { ResultScreen } from "@/components/result-screen";
 
 export default function Page() {
   return (
     <main className="container max-w-md mx-auto h-screen">
-      <MainScreen />
+      <ResultScreen />
     </main>
   );
 }

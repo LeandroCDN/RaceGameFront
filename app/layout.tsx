@@ -5,7 +5,7 @@ import MiniKitProvider from "@/components/minikit-provider";
 import dynamic from "next/dynamic";
 import NextAuthProvider from "@/components/next-auth-provider";
 import { GameProvider } from "@/components/game-provider";
-import { lilitaFont, ZingRust } from "./fonts";
+import { lilitaFont } from "./fonts";
 
 const inter = Inter({ subsets: ["latin"] });
 
