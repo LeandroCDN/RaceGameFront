@@ -32,7 +32,7 @@ export function ResultScreen() {
   const provider = new ethers.JsonRpcProvider(
     "https://worldchain-mainnet.g.alchemy.com/public"
   );
-  const raceAddress = "0x3FaDdb94F6add3645eF1396eb780EC6EDCaA92Fd";
+  const raceAddress = "0xc29268994b42b67D0E71b76f8742ACa7922f184D";
   const TEAMS = [
     "Ribbit Racing",
     "Ribbit Racing",

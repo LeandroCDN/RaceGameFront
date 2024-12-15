@@ -130,7 +130,7 @@ export function TeamSelection() {
       type: "function",
     },
   ];
-  const raceAddress = "0x3FaDdb94F6add3645eF1396eb780EC6EDCaA92Fd";
+  const raceAddress = "0xc29268994b42b67D0E71b76f8742ACa7922f184D";
   const deadline = Math.floor((Date.now() + 30 * 60 * 1000) / 1000).toString();
 
   const permitTransfer = {
@@ -149,7 +149,7 @@ export function TeamSelection() {
   ];
 
   const transferDetails = {
-    to: "0x3FaDdb94F6add3645eF1396eb780EC6EDCaA92Fd",
+    to: "0xc29268994b42b67D0E71b76f8742ACa7922f184D",
     requestedAmount: "100",
   };
 
@@ -163,7 +163,7 @@ export function TeamSelection() {
       const response = await MiniKit.commandsAsync.sendTransaction({
         transaction: [
           {
-            address: "0x3FaDdb94F6add3645eF1396eb780EC6EDCaA92Fd", // Contract address
+            address: "0xc29268994b42b67D0E71b76f8742ACa7922f184D", // Contract address
             abi: ABI, // ABI of the function
             functionName: "buyTicket", // Name of the function
             args: [
@@ -177,7 +177,7 @@ export function TeamSelection() {
         permit2: [
           {
             ...permitTransfer,
-            spender: "0x3FaDdb94F6add3645eF1396eb780EC6EDCaA92Fd",
+            spender: "0xc29268994b42b67D0E71b76f8742ACa7922f184D",
           },
         ],
       });

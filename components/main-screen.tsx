@@ -34,7 +34,7 @@ export function MainScreen() {
   const provider = new ethers.JsonRpcProvider(
     "https://worldchain-mainnet.g.alchemy.com/public"
   );
-  const raceAddress = "0x3FaDdb94F6add3645eF1396eb780EC6EDCaA92Fd";
+  const raceAddress = "0xc29268994b42b67D0E71b76f8742ACa7922f184D";
   const wldAddress = "0x2cFc85d8E48F8EAB294be644d9E25C3030863003";
 
   const getPoints = async () => {

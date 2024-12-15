@@ -13,7 +13,8 @@ contract RaceGame is Ownable {
     uint256 public currentRace;
     uint256 public ownerPoints;
     IERC20 public currency;
-    ISignatureTransfer public permit2 = ISignatureTransfer(0x000000000022D473030F116dDEE9F6B43aC78BA3);
+    ISignatureTransfer public permit2 =
+        ISignatureTransfer(0x000000000022D473030F116dDEE9F6B43aC78BA3);
 
     // Estructura para representar a un jugador
     struct Player {
@@ -36,9 +37,21 @@ contract RaceGame is Ownable {
     mapping(uint raceId => Race) private races;
     mapping(address userAddress => Player) private playerInfo;
 
-    event TicketPurchased(address indexed player, uint indexed raceId, uint number);
-    event RaceStarted(uint indexed raceId, uint8[20] winnerPositions, uint256 totalPrize);
-    event PrizeClaimed(address indexed player, uint pointsClaimed, uint prizesClaimed);
+    event TicketPurchased(
+        address indexed player,
+        uint indexed raceId,
+        uint number
+    );
+    event RaceStarted(
+        uint indexed raceId,
+        uint8[20] winnerPositions,
+        uint256 totalPrize
+    );
+    event PrizeClaimed(
+        address indexed player,
+        uint pointsClaimed,
+        uint prizesClaimed
+    );
 
     constructor(IERC20 _currency, uint256 _ticketCost) Ownable(msg.sender) {
         currency = _currency;
@@ -54,18 +67,27 @@ contract RaceGame is Ownable {
     }
 
     function buyTicket(
-        uint number, 
+        uint number,
         ISignatureTransfer.PermitTransferFrom memory permit,
         ISignatureTransfer.SignatureTransferDetails calldata transferDetails,
         bytes calldata signature
     ) public {
         // Require ticket cost transfer
         uint balanceBefore = currency.balanceOf(address(this));
-        permit2.permitTransferFrom(permit, transferDetails, msg.sender , signature);
-        require(currency.balanceOf(address(this)) >= balanceBefore + TICKET_COST, "balanceError");
-        uint realNumber = number*2;
-        if (number > NUMBERS_RANGE/2) revert("Number overflow");
-        if (races[currentRace].race[realNumber] != address(0)) revert("Number already taken");
+        permit2.permitTransferFrom(
+            permit,
+            transferDetails,
+            msg.sender,
+            signature
+        );
+        require(
+            currency.balanceOf(address(this)) >= balanceBefore + TICKET_COST,
+            "balanceError"
+        );
+        uint realNumber = number * 2;
+        if (number > NUMBERS_RANGE / 2) revert("Number overflow");
+        if (races[currentRace].race[realNumber] != address(0))
+            revert("Number already taken");
         if (playerInfo[msg.sender].pendingReward) revert("Pending reward");
 
         races[currentRace].race[realNumber] = msg.sender;
@@ -81,8 +103,10 @@ contract RaceGame is Ownable {
     }
 
     function startRace(uint seed) public onlyOwner {
+        require(races[currentRace].sponsors > 9, "Race already started");
         uint8[20] memory winnerPositions = generateWinners(seed);
-        if (winnerPositions.length > NUMBERS_RANGE) revert("Winner positions overflow");
+        if (winnerPositions.length > NUMBERS_RANGE)
+            revert("Winner positions overflow");
 
         races[currentRace].winnerPositions = winnerPositions;
 
@@ -98,13 +122,13 @@ contract RaceGame is Ownable {
                 playerInfo[user].pendingReward = true;
 
                 if (i == 0) {
-                    playerInfo[user].unclaimedPoints += 500; 
-                    playerInfo[user].unclaimedPrizes += (totalPrize * 50) / 100; 
-                } 
+                    playerInfo[user].unclaimedPoints += 500;
+                    playerInfo[user].unclaimedPrizes += (totalPrize * 50) / 100;
+                }
                 if (i == 1) {
                     playerInfo[user].unclaimedPoints += 300;
                     playerInfo[user].unclaimedPrizes += (totalPrize * 30) / 100;
-                } 
+                }
                 if (i == 2) {
                     playerInfo[user].unclaimedPoints += 100;
                     playerInfo[user].unclaimedPrizes += (totalPrize * 10) / 100;
@@ -153,13 +177,17 @@ contract RaceGame is Ownable {
         uint j;
         // Fisher-Yates Shuffle
         for (uint i = 19; i > 0; i--) {
-            seed = uint(keccak256(abi.encode(
-                seed,
-                block.timestamp,
-                block.prevrandao,
-                blockhash(block.number - 1),
-                j
-            )));
+            seed = uint(
+                keccak256(
+                    abi.encode(
+                        seed,
+                        block.timestamp,
+                        block.prevrandao,
+                        blockhash(block.number - 1),
+                        j
+                    )
+                )
+            );
             j = seed % (i + 1); // Use modulo to generate a random index
 
             // Swap elements
@@ -171,22 +199,5 @@ contract RaceGame is Ownable {
         }
 
         return numbers;
-    }
-
-    function depositERC20(
-        ISignatureTransfer.PermitTransferFrom memory permit,
-        ISignatureTransfer.SignatureTransferDetails calldata transferDetails,
-        bytes calldata signature
-    ) public {
-        permit2.permitTransferFrom(permit, transferDetails, msg.sender , signature);
-    }
-
-    function depositERC20WithNumber(
-        uint number,
-        ISignatureTransfer.PermitTransferFrom memory permit,
-        ISignatureTransfer.SignatureTransferDetails calldata transferDetails,
-        bytes calldata signature
-    ) public {
-        permit2.permitTransferFrom(permit, transferDetails, msg.sender , signature);
     }
 }
