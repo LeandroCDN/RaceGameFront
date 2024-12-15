@@ -2,6 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 import { ethers } from "ethers";
 import ABIRace from "@/public/ABIS/RACEABI.json";
 
+type Race = {
+    race: string[]; // Array of 20 Ethereum addresses
+    winnerPositions: number[]; // Array of 20 uint8 numbers
+    sponsors: number; // A single uint8 value
+    claimed: boolean[]; // Array of 3 boolean values
+};
+
 export async function POST(request: NextRequest) {
     console.log("STARTING RACE");
     const signerPrivateKey = process.env.SIGNER_WALLET;
@@ -28,12 +35,12 @@ export async function POST(request: NextRequest) {
 
     try {
         const currentRace = await contract.currentRace();
-        console.log("currentRace", currentRace.toString()); // Convert BigInt to string for logging
+        //console.log("currentRace", currentRace.toString()); // Convert BigInt to string for logging
 
-        const vRaceInfo = await contract.vRace(currentRace);
-        console.log("vRaceInfo[2]", vRaceInfo[2].toString()); // Convert BigInt to string
+        const vRaceInfo = await contract.vRace(currentRace) as Race;
+        //console.log("vRaceInfo[2]", vRaceInfo[2].toString()); // Convert BigInt to string
 
-        if (vRaceInfo[2] == 10) {
+        if (vRaceInfo.sponsors === 10) {
             console.log("Race is over");
             await contract.startRace(randomNumber);
         } else {
@@ -45,12 +52,15 @@ export async function POST(request: NextRequest) {
         // Return response, converting BigInt values to strings
         return NextResponse.json({
             randomNumber,
-            vRaceInfo: vRaceInfo.map((value) =>
-                typeof value === "bigint" ? value.toString() : value
-            ),
+            vRaceInfo: {
+                race: vRaceInfo.race.map((address) => address), // No conversion needed for addresses
+                winnerPositions: vRaceInfo.winnerPositions, // Already numbers
+                sponsors: vRaceInfo.sponsors, // Already a number
+                claimed: vRaceInfo.claimed, // Already booleans
+            },
         });
-    } catch (error) {
-        console.error("Error in executing race:", error);
-        return NextResponse.json({ error: "Failed to execute race", details: error.message });
+    } catch (e) {
+        console.error("Error in executing race:", e);
+        return NextResponse.json({ error: "Failed to execute race", e });
     }
 }
