@@ -183,24 +183,37 @@ export function TeamSelection() {
       });
       console.log("Transaction sent:", response);
 
-      if (raceData?.sponsors == 9) {
-        try {
-          const res = await fetch("/api/ejecute-race", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-          });
+      if (response?.finalPayload?.status === "success") {
+        console.log("Transaction successfully submitted. Checking sponsors...");
 
-          if (!res.ok) {
-            throw new Error("Error en la solicitud");
+        // Aquí verificarías si `raceData.sponsors == 9`
+        // Actualizamos para iniciar la carrera inmediatamente
+        if (raceData?.sponsors === 9) {
+          try {
+            console.log("Sponsors count is 9, triggering race execution...");
+
+            // Llamar al endpoint `/api/ejecute-race`
+            const res = await fetch("/api/ejecute-race", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            });
+
+            if (!res.ok) {
+              throw new Error("Error en la solicitud");
+            }
+
+            const data = await res.json();
+            console.log("Respuesta del servidor:", data);
+          } catch (error) {
+            console.error("Error al ejecutar carrera:", error);
           }
-
-          const data = await res.json();
-          console.log("Respuesta del servidor:", data);
-        } catch (error) {
-          console.error("Error al ejecutar carrera:", error);
+        } else {
+          console.log("Sponsors count is not 9. Race will not start yet.");
         }
+      } else {
+        console.error("Transaction not successfully submitted:", response);
       }
     } catch (error) {
       console.error("Error executing transaction:", error);
