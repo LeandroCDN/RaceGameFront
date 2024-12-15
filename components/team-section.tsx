@@ -228,9 +228,9 @@ export function TeamSelection() {
       };
       console.log("vRaceInfo:", vRaceInfo);
       setRaceData(raceInfoData);
-      // if (vRaceInfo[2] == 10) {
-      //   await launchGame();
-      // }
+      if (vRaceInfo[2] == 10) {
+        await launchGame();
+      }
     };
 
     const launchGame = async () => {
@@ -383,7 +383,7 @@ export function TeamSelection() {
                 justifyContent: "center",
                 alignItems: "center",
               }}
-              onClick={() => router.push("/race")}
+              onClick={() => launchGame()}
             >
               SURVIVOR
             </button>
