@@ -14,7 +14,6 @@ import { ethers } from "ethers";
 import { MiniKit } from "@worldcoin/minikit-js";
 import { ZingRust } from "@/app/fonts";
 import { useRouter } from "next/navigation";
-import ClaimRewardsButton from "./claim-rewards-button";
 
 export function MainScreen() {
   const router = useRouter();
