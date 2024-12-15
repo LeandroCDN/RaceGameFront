@@ -137,7 +137,7 @@ export function ResultScreen() {
 
       await setPlayerStat(playerStatData);
       console.log("Player:", playerStatData);
-      const vRaceInfo = await contract.vRace(1);
+      const vRaceInfo = await contract.vRace(playerStatData.lastRaceId);
 
       const raceInfoData = {
         race: vRaceInfo[0],
@@ -168,10 +168,12 @@ export function ResultScreen() {
   const isUserTeam = (teamIndex: number) => {
     const userAddress = MiniKit.walletAddress;
     if (!raceData || !userAddress) return false;
+    const winnerPositions = raceData.winnerPositions[teamIndex];
 
     // Compara la dirección del usuario con la dirección en race
     return (
-      raceData.race[teamIndex]?.toLowerCase() === userAddress.toLowerCase()
+      raceData.race[winnerPositions]?.toLowerCase() ===
+      userAddress.toLowerCase()
     );
   };
 
@@ -288,7 +290,9 @@ export function ResultScreen() {
                         <div
                           key={team}
                           className={` ${
-                            isUserTeam(index + 3) ? " font-semibold" : ""
+                            isUserTeam(index + 3)
+                              ? " font-semibold text-2xl"
+                              : ""
                           }`}
                         >
                           <div className="flex justify-between items-center flex-row">
@@ -296,7 +300,7 @@ export function ResultScreen() {
                             <div className="flex flex-row">
                               <p
                                 className={`text-sm ml-1 ${
-                                  isUserTeam(index) ? "text-green-500" : ""
+                                  isUserTeam(index + 3) ? "text-green-500" : ""
                                 }`}
                               >
                                 {" "}
@@ -304,7 +308,7 @@ export function ResultScreen() {
                               </p>
                               <p
                                 className={`text-sm ${
-                                  isUserTeam(index) ? "text-green-500" : ""
+                                  isUserTeam(index + 3) ? "text-green-500" : ""
                                 }`}
                               >
                                 {" "}
@@ -333,14 +337,14 @@ export function ResultScreen() {
                             <div className="flex flex-row">
                               <p
                                 className={`text-sm ml-1 ${
-                                  isUserTeam(index) ? "text-green-500" : ""
+                                  isUserTeam(index + 12) ? "text-green-500" : ""
                                 }`}
                               >
                                 {team} -
                               </p>
                               <p
                                 className={`text-sm ${
-                                  isUserTeam(index) ? "text-green-500" : ""
+                                  isUserTeam(index + 12) ? "text-green-500" : ""
                                 }`}
                               >
                                 {TEAMS[TEAMSRunners.indexOf(team)]

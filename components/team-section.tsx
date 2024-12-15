@@ -391,7 +391,7 @@ export function TeamSelection() {
           <div className="w-[50%]">
             <Button
               onClick={() => {
-                launchGame();
+                handleBuyWorker();
               }}
               disabled={false}
               className="h-auto  py-4 px-6 text-3xl rounded-full w-[100%] "

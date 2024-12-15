@@ -14,6 +14,7 @@ import { ethers } from "ethers";
 import { MiniKit } from "@worldcoin/minikit-js";
 import { ZingRust } from "@/app/fonts";
 import { useRouter } from "next/navigation";
+import ClaimRewardsButton from "./claim-rewards-button";
 
 export function MainScreen() {
   const router = useRouter();
@@ -87,6 +88,43 @@ export function MainScreen() {
     getPoints();
   }, []);
 
+  const handleButtonClick = () => {
+    // Case 1: Won the race (unclaimed points)
+    if (playerStat && playerStat.unclaimedPoints > 0) {
+      router.push(`/result?raceId=${playerStat.lastRaceId}`);
+      return;
+    }
+
+    // Case 2: Lost the race (played before but no unclaimed points)
+    if (
+      playerStat &&
+      playerStat.unclaimedPoints <= 0 &&
+      playerStat.lastRaceId !== 0
+    ) {
+      router.push(`/result?raceId=${playerStat.lastRaceId}`);
+      return;
+    }
+
+    // Case 3: Never played a race - button will be disabled
+  };
+
+  // Determine button text and state
+  const getButtonContent = () => {
+    if (playerStat && playerStat.unclaimedPoints > 0) {
+      return "CLAIM <br /> REWARDS";
+    }
+
+    if (
+      playerStat &&
+      playerStat.unclaimedPoints <= 0 &&
+      playerStat.lastRaceId !== 0
+    ) {
+      return "VIEW <br /> RESULT";
+    }
+
+    return "CLAIM <br /> REWARDS";
+  };
+
   return (
     <div
       className="w-full h-screen flex flex-col justify-between"
@@ -123,7 +161,7 @@ export function MainScreen() {
           className={`flex flex-col justify-end align-end text-right space-y-1 w-full ${ZingRust.className}`}
         >
           <div>
-            <p className="text-2xl text-right">Race against other memes</p>
+            <p className="text-2xl text-right">Race against other memeees</p>
           </div>
           <div className="flex flex-row justify-end align-end text-right w-full">
             <p className="text-5xl mr-2">AND </p>
@@ -176,9 +214,9 @@ export function MainScreen() {
             </p>
           </div>
 
-          <button
+          {/* <button
             onClick={() => router.push("/result")}
-            disabled={!(playerStat && playerStat.unclaimedPoints > 0)}
+            // disabled={!(playerStat && playerStat.unclaimedPoints > 0)}
             className={` w-[100%] h-auto text-3xl ${
               playerStat && playerStat.unclaimedPoints > 0
                 ? "border-green-500 text-2xl text-green-300 drop-shadow-[0_0_20px_rgba(255,215,0,0.5)]"
@@ -200,6 +238,32 @@ export function MainScreen() {
             >
               CLAIM <br /> REWARDS
             </div>
+          </button> */}
+          <button
+            onClick={handleButtonClick}
+            disabled={playerStat?.lastRaceId === 0}
+            className={`w-[100%] h-auto text-3xl ${
+              playerStat && playerStat.unclaimedPoints > 0
+                ? "border-green-500 text-2xl text-green-300 drop-shadow-[0_0_20px_rgba(255,215,0,0.5)]"
+                : playerStat && playerStat.lastRaceId !== 0
+                ? "text-white" // Normal state for viewed results
+                : "opacity-40 cursor-not-allowed"
+            }`}
+            style={{
+              backgroundImage: "url('/buttons/claimgreen.webp')",
+              backgroundSize: "100% 100%",
+              backgroundRepeat: "no-repeat",
+              height: "84px",
+              width: "full",
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <div
+              className="text-white leading-[0.9] tracking-tight text-shadow-3"
+              dangerouslySetInnerHTML={{ __html: getButtonContent() }}
+            />
           </button>
         </div>
         <div></div>
