@@ -89,21 +89,22 @@ export function MainScreen() {
 
   const handleButtonClick = () => {
     // Case 1: Won the race (unclaimed points)
-    if (playerStat && playerStat.unclaimedPoints > 0) {
-      router.push(`/result?raceId=${playerStat.lastRaceId}`);
-      return;
-    }
-
+    // if (playerStat && playerStat.unclaimedPoints > 0) {
+    //   router.push(`/result?raceId=${playerStat.lastRaceId}`);
+    //   return;
+    // } else {
+    //   router.push(`/result?raceId=${playerStat.lastRaceId}`);
+    //   return;
+    // }
     // Case 2: Lost the race (played before but no unclaimed points)
-    if (
-      playerStat &&
-      playerStat.unclaimedPoints <= 0 &&
-      playerStat.lastRaceId !== 0
-    ) {
-      router.push(`/result?raceId=${playerStat.lastRaceId}`);
-      return;
-    }
-
+    // if (
+    //   playerStat &&
+    //   playerStat.unclaimedPoints <= 0 &&
+    //   playerStat.lastRaceId !== 0
+    // ) {
+    //   router.push(`/result?raceId=${playerStat.lastRaceId}`);
+    //   return;
+    // }
     // Case 3: Never played a race - button will be disabled
   };
 
@@ -239,8 +240,8 @@ export function MainScreen() {
             </div>
           </button> */}
           <button
-            onClick={handleButtonClick}
-            disabled={playerStat?.lastRaceId === 0}
+            onClick={() => router.push("/result")}
+            disabled={playerStat?.totalBuys === 0}
             className={`w-[100%] h-auto text-3xl ${
               playerStat && playerStat.unclaimedPoints > 0
                 ? "border-green-500 text-2xl text-green-300 drop-shadow-[0_0_20px_rgba(255,215,0,0.5)]"
