@@ -10,7 +10,7 @@ import MyModal from "./modal";
 import { ZingRust } from "@/app/fonts";
 import { useRouter } from "next/navigation";
 
-export function ResultScreen(raceId: number) {
+export function ResultScreen() {
   const router = useRouter();
   // const { screen, setScreen, selectedTeam } = useGame();
   const [playerStat, setPlayerStat] = useState<{
