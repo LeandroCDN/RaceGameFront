@@ -10,7 +10,7 @@ import MyModal from "./modal";
 import { ZingRust } from "@/app/fonts";
 import { useRouter } from "next/navigation";
 
-export function ResultScreen() {
+export function ResultScreen(raceId: number) {
   const router = useRouter();
   // const { screen, setScreen, selectedTeam } = useGame();
   const [playerStat, setPlayerStat] = useState<{
@@ -137,6 +137,7 @@ export function ResultScreen() {
 
       await setPlayerStat(playerStatData);
       console.log("Player:", playerStatData);
+
       const vRaceInfo = await contract.vRace(playerStatData.lastRaceId);
 
       const raceInfoData = {

@@ -114,11 +114,7 @@ export function MainScreen() {
       return "CLAIM <br /> REWARDS";
     }
 
-    if (
-      playerStat &&
-      playerStat.unclaimedPoints <= 0 &&
-      playerStat.lastRaceId !== 0
-    ) {
+    if (playerStat && playerStat?.totalBuys !== 0) {
       return "VIEW <br /> RESULT";
     }
 
@@ -243,10 +239,8 @@ export function MainScreen() {
             onClick={() => router.push("/result")}
             disabled={playerStat?.totalBuys === 0}
             className={`w-[100%] h-auto text-3xl ${
-              playerStat && playerStat.unclaimedPoints > 0
+              playerStat && playerStat?.totalBuys !== 0
                 ? "border-green-500 text-2xl text-green-300 drop-shadow-[0_0_20px_rgba(255,215,0,0.5)]"
-                : playerStat && playerStat.lastRaceId !== 0
-                ? "text-white" // Normal state for viewed results
                 : "opacity-40 cursor-not-allowed"
             }`}
             style={{
