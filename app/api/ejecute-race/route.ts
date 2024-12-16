@@ -33,7 +33,7 @@ export async function POST(_request: NextRequest) {
         const race = await contract.startRace(randomNumber);
     } else {
         //return error
-        console.log("Race is not over");
+        console.log("Race is not over", vRaceInfo[2]);
         return NextResponse.json({ error: "Race is not over" });
     }
 
