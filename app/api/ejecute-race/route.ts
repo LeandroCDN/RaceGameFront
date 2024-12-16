@@ -25,7 +25,6 @@ export async function POST(_request: NextRequest) {
     const contract = new ethers.Contract(raceAddress, ABIRace, signer);
     const currentRace = await contract.currentRace();
 
-
     const vRaceInfo = await contract.vRace(currentRace);
 
 

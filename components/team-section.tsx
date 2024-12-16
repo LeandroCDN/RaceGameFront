@@ -132,6 +132,7 @@ export function TeamSelection() {
   ];
   const raceAddress = "0xc29268994b42b67D0E71b76f8742ACa7922f184D";
   const deadline = Math.floor((Date.now() + 30 * 60 * 1000) / 1000).toString();
+  const [isModalOpen, setIsModalOpen] = useState(false);
 
   const permitTransfer = {
     permitted: {
@@ -424,6 +425,21 @@ export function TeamSelection() {
           </div>
         </CardFooter>
       </div>
+      {raceData?.sponsors == 0 && (
+        <div
+          className="fixed inset-0 bg-black bg-opacity-70 z-50 flex justify-center items-center"
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div
+            className="bg-transparent p-8 rounded-lg text-center"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <h2 className="text-5xl text-white text-center">
+              LA CARRERA ESTA CORRIENDO, <br /> VUELVA PRONTO
+            </h2>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

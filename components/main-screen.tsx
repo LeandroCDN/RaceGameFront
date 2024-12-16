@@ -29,7 +29,14 @@ export function MainScreen() {
     numbers: number[];
     totalBuys: number;
   } | null>(null);
-  const RPC = process.env.NEXT_PUBLIC_RPC_URL;
+
+  const [raceData, setRaceData] = useState<{
+    race: string[];
+    winnerPositions: number[];
+    sponsors: number;
+    claimed: boolean[];
+  } | null>(null);
+
   const provider = new ethers.JsonRpcProvider(
     "https://worldchain-mainnet.g.alchemy.com/public"
   );
@@ -42,8 +49,6 @@ export function MainScreen() {
         "NEXT_PUBLIC_MINE_ADDRESS environment variable is not set"
       );
     }
-    console.log("user minikit", MiniKit.user);
-    console.log("appId minikit", MiniKit.appId);
     console.log("walletAddress minikit", MiniKit.walletAddress);
     try {
       const contract = new ethers.Contract(raceAddress, ABI, provider);
@@ -76,6 +81,16 @@ export function MainScreen() {
 
       const currentRace = await contract.currentRace();
       const vRaceInfo = await contract.vRace(currentRace);
+      const raceInfoData = {
+        race: vRaceInfo[0],
+        winnerPositions: vRaceInfo[1],
+        sponsors: vRaceInfo[2],
+        claimed: vRaceInfo[3],
+      };
+
+      console.log("vRaceInfo:", vRaceInfo);
+      setRaceData(raceInfoData);
+
       console.log(playerStatData);
     } catch (error) {
       console.error("Error fetching base price:", error);
