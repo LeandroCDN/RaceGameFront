@@ -17,6 +17,7 @@ export function ResultScreen() {
     points: number;
     pendingReward: boolean;
     lastRaceId: number;
+    userCurrentRace: number;
     unclaimedPoints: number;
     unclaimedPrizes: number;
     numbers: number[];
@@ -129,10 +130,11 @@ export function ResultScreen() {
         points: Number(playerInfo[0]),
         pendingReward: playerInfo[1],
         lastRaceId: Number(playerInfo[2]),
-        unclaimedPoints: Number(playerInfo[3]),
-        unclaimedPrizes: Number(playerInfo[4]),
-        numbers: playerInfo[5].map(Number),
-        totalBuys: Number(playerInfo[6]),
+        userCurrentRace: Number(playerInfo[3]),
+        unclaimedPoints: Number(playerInfo[4]),
+        unclaimedPrizes: Number(playerInfo[5]),
+        numbers: playerInfo[6].map(Number),
+        totalBuys: Number(playerInfo[7]),
       };
 
       await setPlayerStat(playerStatData);
