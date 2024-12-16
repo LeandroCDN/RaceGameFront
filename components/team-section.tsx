@@ -130,7 +130,7 @@ export function TeamSelection() {
       type: "function",
     },
   ];
-  const raceAddress = "0xc29268994b42b67D0E71b76f8742ACa7922f184D";
+  const raceAddress = "0xaAC1FE8B6391E74f0DEd8336aD27DB903375C4FE";
   const deadline = Math.floor((Date.now() + 30 * 60 * 1000) / 1000).toString();
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -150,7 +150,7 @@ export function TeamSelection() {
   ];
 
   const transferDetails = {
-    to: "0xc29268994b42b67D0E71b76f8742ACa7922f184D",
+    to: "0xaAC1FE8B6391E74f0DEd8336aD27DB903375C4FE",
     requestedAmount: "100",
   };
 
@@ -164,7 +164,7 @@ export function TeamSelection() {
       const response = await MiniKit.commandsAsync.sendTransaction({
         transaction: [
           {
-            address: "0xc29268994b42b67D0E71b76f8742ACa7922f184D", // Contract address
+            address: "0xaAC1FE8B6391E74f0DEd8336aD27DB903375C4FE", // Contract address
             abi: ABI, // ABI of the function
             functionName: "buyTicket", // Name of the function
             args: [
@@ -178,7 +178,7 @@ export function TeamSelection() {
         permit2: [
           {
             ...permitTransfer,
-            spender: "0xc29268994b42b67D0E71b76f8742ACa7922f184D",
+            spender: "0xaAC1FE8B6391E74f0DEd8336aD27DB903375C4FE",
           },
         ],
       });
@@ -425,7 +425,7 @@ export function TeamSelection() {
           </div>
         </CardFooter>
       </div>
-      {raceData?.sponsors == 0 && (
+      {raceData?.sponsors == 10 && (
         <div
           className="fixed inset-0 bg-black bg-opacity-70 z-50 flex justify-center items-center"
           onClick={() => setIsModalOpen(false)}
@@ -437,6 +437,23 @@ export function TeamSelection() {
             <h2 className="text-5xl text-white text-center">
               LA CARRERA ESTA CORRIENDO, <br /> VUELVA PRONTO
             </h2>
+            <button
+              className="h-auto  mb-2 py-1 text-shadow-3 text-white bg-gray-400 px-6 rounded-full w-[100%]"
+              style={{
+                backgroundImage: "url('/buttons/yellow.png')",
+                backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
+                backgroundRepeat: "no-repeat", // Evita la repetición
+                height: "auto",
+                width: "full",
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+                filter: "grayscale(100%)",
+              }}
+              onClick={() => router.push("/race")}
+            >
+              RETURN
+            </button>
           </div>
         </div>
       )}
