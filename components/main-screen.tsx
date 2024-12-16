@@ -31,13 +31,6 @@ export function MainScreen() {
     totalBuys: number;
   } | null>(null);
 
-  const [raceData, setRaceData] = useState<{
-    race: string[];
-    winnerPositions: number[];
-    sponsors: number;
-    claimed: boolean[];
-  } | null>(null);
-
   const provider = new ethers.JsonRpcProvider(
     "https://worldchain-mainnet.g.alchemy.com/public"
   );
@@ -83,15 +76,7 @@ export function MainScreen() {
 
       const currentRace = await contract.currentRace();
       const vRaceInfo = await contract.vRace(currentRace);
-      const raceInfoData = {
-        race: vRaceInfo[0],
-        winnerPositions: vRaceInfo[1],
-        sponsors: vRaceInfo[2],
-        claimed: vRaceInfo[3],
-      };
-
       console.log("vRaceInfo:", vRaceInfo);
-      setRaceData(raceInfoData);
 
       console.log(playerStatData);
     } catch (error) {
