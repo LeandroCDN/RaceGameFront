@@ -224,32 +224,6 @@ export function MainScreen() {
               <p className="text-xl text-center text-shadow-3">(COMING SOON)</p>
             </p>
           </div>
-
-          {/* <button
-            onClick={() => router.push("/result")}
-            // disabled={!(playerStat && playerStat.unclaimedPoints > 0)}
-            className={` w-[100%] h-auto text-3xl ${
-              playerStat && playerStat.unclaimedPoints > 0
-                ? "border-green-500 text-2xl text-green-300 drop-shadow-[0_0_20px_rgba(255,215,0,0.5)]"
-                : "opacity-40 cursor-not-allowed"
-            }`}
-            style={{
-              backgroundImage: "url('/buttons/claimgreen.webp')",
-              backgroundSize: "100% 100%", // Asegura que la imagen cubra todo el botón
-              backgroundRepeat: "no-repeat", // Evita la repetición
-              height: "84px",
-              width: "full",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-            }}
-          >
-            <div
-              className={`text-white leading-[0.9] tracking-tight text-shadow-3`}
-            >
-              CLAIM <br /> REWARDS
-            </div>
-          </button> */}
           <button
             onClick={() => router.push("/result")}
             disabled={playerStat?.totalBuys === 0}
